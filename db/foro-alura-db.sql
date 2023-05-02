@@ -8,7 +8,7 @@ CREATE TABLE topicos (
     titulo VARCHAR(100) NOT NULL,
     mensaje TEXT NOT NULL,
     fecha_creacion DATE NOT NULL,
-    estado TINYINT NOT NULL DEFAULT 0,
+    estado ENUM('SOLUCIONADO', 'NOSOLUCIONADO'),
     autor VARCHAR(200) NOT NULL,
     curso VARCHAR(200) NOT NULL,
     PRIMARY KEY (id_topico)
