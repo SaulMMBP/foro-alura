@@ -18,6 +18,21 @@
 ---
 </div>
 
+## 🗄️ Base de datos
+
+```mermaid
+erDiagram
+     topicos {
+          BIGINT id_topico
+          VARCHAR titulo
+          TEXT mensaje
+          DATE fecha_creacion
+          ENUM estado
+          VARCHAR autor
+          VARCHAR curso
+     }
+```
+
 ## 🖥️ Tecnologías Utilizadas:
 
 - [Eclipse](https://www.eclipse.org/)
@@ -28,5 +43,5 @@
 - [Token JWT](https://jwt.io/)
 
 
-## &#128247; Capturas
-## &#128187; Indicaciones para ejecución desde IDE
+## 📷 Capturas
+## ⚙️ Indicaciones para ejecución desde IDE
