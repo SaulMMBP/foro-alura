@@ -40,8 +40,8 @@ public class TopicoService {
 		updatedTopico.setTitulo(topicoDto.titulo());
 		updatedTopico.setMensaje(topicoDto.mensaje());
 		updatedTopico.setEstado(topicoDto.estado());
-		updatedTopico.setAutor(topicoDto.autor());
-		updatedTopico.setCurso(topicoDto.curso());
+		updatedTopico.setAutor(topicoDto.autor().toEntity());
+		updatedTopico.setCurso(topicoDto.curso().toEntity());
 		
 		return this.topicoRepository.save(updatedTopico).toDto();
 	}
