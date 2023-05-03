@@ -42,6 +42,5 @@ erDiagram
 - [Spring Security](https://start.spring.io/)
 - [Token JWT](https://jwt.io/)
 
-
-## 📷 Capturas
 ## ⚙️ Indicaciones para ejecución desde IDE
+
