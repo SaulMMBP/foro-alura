@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.github.saulmmbp.foroAlura.dto.TopicoDto;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -25,7 +27,7 @@ public class Topico {
 	
 	@Column(name = "fecha_creacion")
 	@CreationTimestamp
-	private LocalDate fechaCreación;
+	private LocalDate fechaCreacion;
 	
 	@Column(name = "estado")
 	@Enumerated(EnumType.STRING)
@@ -36,4 +38,11 @@ public class Topico {
 	
 	@Column(name = "curso")
 	private String curso;
+	
+	public TopicoDto toDto() {
+		TopicoDto topicoDto = new TopicoDto(this.id, this.titulo, this.mensaje, this.fechaCreacion,
+				this.estado, this.autor, this.curso);
+		return topicoDto;
+	}
+	
 }
