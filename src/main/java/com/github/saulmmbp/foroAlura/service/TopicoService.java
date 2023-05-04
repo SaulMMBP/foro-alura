@@ -23,7 +23,7 @@ public class TopicoService {
 	
 	public List<TopicoDto> findAll() {
 		return this.topicoRepository.findAll().stream()
-				.map(topico -> topico.toDto())
+				.map(Topico::toDto)
 				.collect(Collectors.toList());
 	}
 	
@@ -40,9 +40,6 @@ public class TopicoService {
 		updatedTopico.setTitulo(topicoDto.titulo());
 		updatedTopico.setMensaje(topicoDto.mensaje());
 		updatedTopico.setEstado(topicoDto.estado());
-		updatedTopico.setAutor(topicoDto.autor().toEntity());
-		updatedTopico.setCurso(topicoDto.curso().toEntity());
-		
 		return this.topicoRepository.save(updatedTopico).toDto();
 	}
 	
