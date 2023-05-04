@@ -13,6 +13,8 @@ import com.github.saulmmbp.foroAlura.dto.UsuarioDto;
 import com.github.saulmmbp.foroAlura.service.UsuarioService;
 import com.github.saulmmbp.foroAlura.util.UsuarioModelAssembler;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
@@ -40,7 +42,7 @@ public class UsuarioController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<EntityModel<UsuarioDto>> newUsuario(@RequestBody UsuarioDto usuarioDto) {
+	public ResponseEntity<EntityModel<UsuarioDto>> newUsuario(@RequestBody @Valid UsuarioDto usuarioDto) {
 		EntityModel<UsuarioDto> usuario = usuarioAssembler.toModel(usuarioService.save(usuarioDto));
 		return ResponseEntity
 				.created(usuario.getRequiredLink(IanaLinkRelations.SELF).toUri())
@@ -48,7 +50,7 @@ public class UsuarioController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<EntityModel<UsuarioDto>> updateUsuario(@RequestBody UsuarioDto usuarioDto, @PathVariable Long id) {
+	public ResponseEntity<EntityModel<UsuarioDto>> updateUsuario(@RequestBody @Valid UsuarioDto usuarioDto, @PathVariable Long id) {
 		EntityModel<UsuarioDto> usuario = usuarioAssembler.toModel(usuarioService.update(usuarioDto, id));
 		return ResponseEntity
 				.created(usuario.getRequiredLink(IanaLinkRelations.SELF).toUri())

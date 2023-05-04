@@ -13,6 +13,8 @@ import com.github.saulmmbp.foroAlura.dto.RespuestaDto;
 import com.github.saulmmbp.foroAlura.service.RespuestaService;
 import com.github.saulmmbp.foroAlura.util.RespuestaModelAssembler;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/respuestas")
 public class RespuestaController {
@@ -40,7 +42,7 @@ public class RespuestaController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<EntityModel<RespuestaDto>> newRespuesta(@RequestBody RespuestaDto respuestaDto) {
+	public ResponseEntity<EntityModel<RespuestaDto>> newRespuesta(@RequestBody @Valid RespuestaDto respuestaDto) {
 		EntityModel<RespuestaDto> respuesta = respuestaAssembler.toModel(respuestaService.save(respuestaDto));
 		return ResponseEntity
 				.created(respuesta.getRequiredLink(IanaLinkRelations.SELF).toUri())
@@ -48,7 +50,7 @@ public class RespuestaController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<EntityModel<RespuestaDto>> updateRespuesta(@RequestBody RespuestaDto respuestaDto, @PathVariable Long id) {
+	public ResponseEntity<EntityModel<RespuestaDto>> updateRespuesta(@RequestBody @Valid RespuestaDto respuestaDto, @PathVariable Long id) {
 		EntityModel<RespuestaDto> respuesta = respuestaAssembler.toModel(respuestaService.update(respuestaDto, id));
 		return ResponseEntity
 				.created(respuesta.getRequiredLink(IanaLinkRelations.SELF).toUri())

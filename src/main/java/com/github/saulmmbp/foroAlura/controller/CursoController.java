@@ -13,6 +13,8 @@ import com.github.saulmmbp.foroAlura.dto.CursoDto;
 import com.github.saulmmbp.foroAlura.service.CursoService;
 import com.github.saulmmbp.foroAlura.util.CursoModelAssembler;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/cursos")
 public class CursoController {
@@ -40,7 +42,7 @@ public class CursoController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<EntityModel<CursoDto>> newCurso(@RequestBody CursoDto cursoDto) {
+	public ResponseEntity<EntityModel<CursoDto>> newCurso(@RequestBody @Valid CursoDto cursoDto) {
 		EntityModel<CursoDto> curso = cursoAssembler.toModel(cursoService.save(cursoDto));
 		return ResponseEntity
 				.created(curso.getRequiredLink(IanaLinkRelations.SELF).toUri())
@@ -48,7 +50,7 @@ public class CursoController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<EntityModel<CursoDto>> updateCurso(@RequestBody CursoDto cursoDto, @PathVariable Long id) {
+	public ResponseEntity<EntityModel<CursoDto>> updateCurso(@RequestBody @Valid CursoDto cursoDto, @PathVariable Long id) {
 		EntityModel<CursoDto> curso = cursoAssembler.toModel(cursoService.update(cursoDto, id));
 		return ResponseEntity
 				.created(curso.getRequiredLink(IanaLinkRelations.SELF).toUri())
