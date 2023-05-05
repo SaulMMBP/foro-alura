@@ -46,8 +46,8 @@ CREATE TABLE respuestas (
 # Datos ejemplo
 
 INSERT INTO usuarios(nombre, email, contrasena) VALUES 
-    ('Saul Malagon', 'saul@mail.com', '1234'),
-    ('Daniel Juarez', 'daniel@mail.com', '5678');
+    ('Saul Malagon', 'saul@mail.com', '$2a$12$YH38IqlU2boa9KFBVQtyt.MRsSsW3mk71FJWJZv6U/veAy.aSRkO2'),
+    ('Daniel Juarez', 'daniel@mail.com', '$2a$12$wZG0LZzQWoP6rbn3i.SbPuEUOt4r/VDs9DpaMUzD6ktGQo1mjGVme');
     
 INSERT INTO cursos(nombre, categoria) VALUES
     ('Springboot rest api', 'java'),
