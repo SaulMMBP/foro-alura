@@ -7,13 +7,13 @@ import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
 import com.github.saulmmbp.foroAlura.controller.UsuarioController;
-import com.github.saulmmbp.foroAlura.dto.UsuarioDto;
+import com.github.saulmmbp.foroAlura.dto.UsuarioResponse;
 
 @Component
-public class UsuarioModelAssembler implements RepresentationModelAssembler<UsuarioDto, EntityModel<UsuarioDto>> {
+public class UsuarioModelAssembler implements RepresentationModelAssembler<UsuarioResponse, EntityModel<UsuarioResponse>> {
 
 	@Override
-	public EntityModel<UsuarioDto> toModel(UsuarioDto entity) {
+	public EntityModel<UsuarioResponse> toModel(UsuarioResponse entity) {
 		return EntityModel.of(entity, 
 				linkTo(methodOn(UsuarioController.class).getUsuario(entity.id())).withSelfRel(),
 				linkTo(methodOn(UsuarioController.class).getUsuarios()).withRel("usuarios"));

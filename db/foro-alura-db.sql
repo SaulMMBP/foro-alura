@@ -6,14 +6,14 @@ USE foro_alura;
 CREATE TABLE usuarios (
     id_usuario BIGINT AUTO_INCREMENT NOT NULL,
     nombre VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
     contrasena VARCHAR(100) NOT NULL,
     PRIMARY KEY(id_usuario)
 );
 
 CREATE TABLE cursos (
     id_curso BIGINT AUTO_INCREMENT NOT NULL,
-    nombre VARCHAR(200) NOT NULL,
+    nombre VARCHAR(200) NOT NULL UNIQUE,
     categoria VARCHAR(100) NOT NULL,
     PRIMARY KEY (id_curso)
 );
@@ -25,7 +25,7 @@ CREATE TABLE topicos (
     fecha_creacion DATE NOT NULL,
     estado ENUM('NO_RESPONDIDO', 'NO_SOLUCIONADO', 'SOLUCIONADO', 'CERRADO') NOT NULL,
     autor BIGINT NOT NULL,
-    curso BIGINT NOT NULL,
+    curso BIGINT,
     PRIMARY KEY (id_topico),
     FOREIGN KEY (autor) REFERENCES usuarios(id_usuario),
     FOREIGN KEY (curso) REFERENCES cursos(id_curso)

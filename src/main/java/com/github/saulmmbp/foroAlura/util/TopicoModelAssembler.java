@@ -7,13 +7,13 @@ import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
 import com.github.saulmmbp.foroAlura.controller.*;
-import com.github.saulmmbp.foroAlura.dto.TopicoDto;
+import com.github.saulmmbp.foroAlura.dto.TopicoResponse;
 
 @Component
-public class TopicoModelAssembler implements RepresentationModelAssembler<TopicoDto, EntityModel<TopicoDto>> {
+public class TopicoModelAssembler implements RepresentationModelAssembler<TopicoResponse, EntityModel<TopicoResponse>> {
 
 	@Override
-	public EntityModel<TopicoDto> toModel(TopicoDto entity) {
+	public EntityModel<TopicoResponse> toModel(TopicoResponse entity) {
 		return EntityModel.of(entity, 
 				linkTo(methodOn(TopicoController.class).getTopico(entity.id())).withSelfRel(),
 				linkTo(methodOn(UsuarioController.class).getUsuario(entity.autor().id())).withRel("autor"),

@@ -9,7 +9,7 @@ import org.springframework.hateoas.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.github.saulmmbp.foroAlura.dto.TopicoDto;
+import com.github.saulmmbp.foroAlura.dto.*;
 import com.github.saulmmbp.foroAlura.service.TopicoService;
 import com.github.saulmmbp.foroAlura.util.TopicoModelAssembler;
 
@@ -28,30 +28,30 @@ public class TopicoController {
 	}
 
 	@GetMapping
-	public CollectionModel<EntityModel<TopicoDto>> getTopicos() {
-		List<EntityModel<TopicoDto>> topicos = this.topicoService.findAll().stream()
+	public CollectionModel<EntityModel<TopicoResponse>> getTopicos() {
+		List<EntityModel<TopicoResponse>> topicos = this.topicoService.findAll().stream()
 				.map(topicoAssembler::toModel)
 				.collect(Collectors.toList());
 		return CollectionModel.of(topicos, linkTo(methodOn(TopicoController.class).getTopicos()).withSelfRel());
 	}
 
 	@GetMapping("/{id}")
-	public EntityModel<TopicoDto> getTopico(@PathVariable Long id) {
-		TopicoDto topico = topicoService.findById(id);
+	public EntityModel<TopicoResponse> getTopico(@PathVariable Long id) {
+		TopicoResponse topico = topicoService.findById(id);
 		return topicoAssembler.toModel(topico);
 	}
 	
 	@PostMapping
-	public ResponseEntity<EntityModel<TopicoDto>> newTopico(@RequestBody @Valid TopicoDto topico) {
-		EntityModel<TopicoDto> newTopico = this.topicoAssembler.toModel(this.topicoService.save(topico));
+	public ResponseEntity<EntityModel<TopicoResponse>> newTopico(@RequestBody @Valid TopicoPostRequest topico) {
+		EntityModel<TopicoResponse> newTopico = this.topicoAssembler.toModel(topicoService.save(topico));
 		return ResponseEntity
 				.created(newTopico.getRequiredLink(IanaLinkRelations.SELF).toUri())
 				.body(newTopico);
 	}
 	
-	@PutMapping("/{id}")
-	public ResponseEntity<EntityModel<TopicoDto>> updateTopico(@RequestBody @Valid TopicoDto topico, @PathVariable Long id) {
-		EntityModel<TopicoDto> updatedTopico = this.topicoAssembler.toModel(this.topicoService.update(topico, id));
+	@PutMapping
+	public ResponseEntity<EntityModel<TopicoResponse>> updateTopico(@RequestBody @Valid TopicoPutRequest topico) {
+		EntityModel<TopicoResponse> updatedTopico = this.topicoAssembler.toModel(topicoService.update(topico));
 		return ResponseEntity
 				.created(updatedTopico.getRequiredLink(IanaLinkRelations.SELF).toUri())
 				.body(updatedTopico);

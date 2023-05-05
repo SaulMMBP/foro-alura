@@ -9,7 +9,7 @@ import org.springframework.hateoas.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.github.saulmmbp.foroAlura.dto.UsuarioDto;
+import com.github.saulmmbp.foroAlura.dto.*;
 import com.github.saulmmbp.foroAlura.service.UsuarioService;
 import com.github.saulmmbp.foroAlura.util.UsuarioModelAssembler;
 
@@ -28,30 +28,30 @@ public class UsuarioController {
 	}
 	
 	@GetMapping
-	public CollectionModel<EntityModel<UsuarioDto>> getUsuarios() {
-		List<EntityModel<UsuarioDto>> usuarios = usuarioService.findAll().stream()
+	public CollectionModel<EntityModel<UsuarioResponse>> getUsuarios() {
+		List<EntityModel<UsuarioResponse>> usuarios = usuarioService.findAll().stream()
 				.map(usuarioAssembler::toModel)
 				.collect(Collectors.toList());
 		return CollectionModel.of(usuarios, linkTo(methodOn(UsuarioController.class).getUsuarios()).withSelfRel());
 	}
 	
 	@GetMapping("/{id}")
-	public EntityModel<UsuarioDto> getUsuario(@PathVariable Long id) {
-		UsuarioDto Usuario = usuarioService.findById(id);
+	public EntityModel<UsuarioResponse> getUsuario(@PathVariable Long id) {
+		UsuarioResponse Usuario = usuarioService.findById(id);
 		return usuarioAssembler.toModel(Usuario);
 	}
 	
 	@PostMapping
-	public ResponseEntity<EntityModel<UsuarioDto>> newUsuario(@RequestBody @Valid UsuarioDto usuarioDto) {
-		EntityModel<UsuarioDto> usuario = usuarioAssembler.toModel(usuarioService.save(usuarioDto));
+	public ResponseEntity<EntityModel<UsuarioResponse>> newUsuario(@RequestBody @Valid UsuarioPostRequest usuarioReq) {
+		EntityModel<UsuarioResponse> usuario = usuarioAssembler.toModel(usuarioService.save(usuarioReq));
 		return ResponseEntity
 				.created(usuario.getRequiredLink(IanaLinkRelations.SELF).toUri())
 				.body(usuario);
 	}
 	
-	@PutMapping("/{id}")
-	public ResponseEntity<EntityModel<UsuarioDto>> updateUsuario(@RequestBody @Valid UsuarioDto usuarioDto, @PathVariable Long id) {
-		EntityModel<UsuarioDto> usuario = usuarioAssembler.toModel(usuarioService.update(usuarioDto, id));
+	@PutMapping
+	public ResponseEntity<EntityModel<UsuarioResponse>> updateUsuario(@RequestBody @Valid UsuarioPutRequest usuarioReq) {
+		EntityModel<UsuarioResponse> usuario = usuarioAssembler.toModel(usuarioService.update(usuarioReq));
 		return ResponseEntity
 				.created(usuario.getRequiredLink(IanaLinkRelations.SELF).toUri())
 				.body(usuario);

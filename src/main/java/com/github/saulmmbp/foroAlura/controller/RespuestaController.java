@@ -9,7 +9,7 @@ import org.springframework.hateoas.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.github.saulmmbp.foroAlura.dto.RespuestaDto;
+import com.github.saulmmbp.foroAlura.dto.*;
 import com.github.saulmmbp.foroAlura.service.RespuestaService;
 import com.github.saulmmbp.foroAlura.util.RespuestaModelAssembler;
 
@@ -28,30 +28,30 @@ public class RespuestaController {
 	}
 	
 	@GetMapping
-	public CollectionModel<EntityModel<RespuestaDto>> getRespuestas() {
-		List<EntityModel<RespuestaDto>> respuestas = respuestaService.findAll().stream()
+	public CollectionModel<EntityModel<RespuestaResponse>> getRespuestas() {
+		List<EntityModel<RespuestaResponse>> respuestas = respuestaService.findAll().stream()
 				.map(respuestaAssembler::toModel)
 				.collect(Collectors.toList());
 		return CollectionModel.of(respuestas, linkTo(methodOn(RespuestaController.class).getRespuestas()).withSelfRel());
 	}
 	
 	@GetMapping("/{id}")
-	public EntityModel<RespuestaDto> getRespuesta(@PathVariable Long id) {
-		RespuestaDto respuesta = respuestaService.findById(id);
+	public EntityModel<RespuestaResponse> getRespuesta(@PathVariable Long id) {
+		RespuestaResponse respuesta = respuestaService.findById(id);
 		return respuestaAssembler.toModel(respuesta);
 	}
 	
 	@PostMapping
-	public ResponseEntity<EntityModel<RespuestaDto>> newRespuesta(@RequestBody @Valid RespuestaDto respuestaDto) {
-		EntityModel<RespuestaDto> respuesta = respuestaAssembler.toModel(respuestaService.save(respuestaDto));
+	public ResponseEntity<EntityModel<RespuestaResponse>> newRespuesta(@RequestBody @Valid RespuestaPostRequest respuestaDto) {
+		EntityModel<RespuestaResponse> respuesta = respuestaAssembler.toModel(respuestaService.save(respuestaDto));
 		return ResponseEntity
 				.created(respuesta.getRequiredLink(IanaLinkRelations.SELF).toUri())
 				.body(respuesta);
 	}
 	
-	@PutMapping("/{id}")
-	public ResponseEntity<EntityModel<RespuestaDto>> updateRespuesta(@RequestBody @Valid RespuestaDto respuestaDto, @PathVariable Long id) {
-		EntityModel<RespuestaDto> respuesta = respuestaAssembler.toModel(respuestaService.update(respuestaDto, id));
+	@PutMapping
+	public ResponseEntity<EntityModel<RespuestaResponse>> updateRespuesta(@RequestBody @Valid RespuestaPutRequest respuestaDto) {
+		EntityModel<RespuestaResponse> respuesta = respuestaAssembler.toModel(respuestaService.update(respuestaDto));
 		return ResponseEntity
 				.created(respuesta.getRequiredLink(IanaLinkRelations.SELF).toUri())
 				.body(respuesta);

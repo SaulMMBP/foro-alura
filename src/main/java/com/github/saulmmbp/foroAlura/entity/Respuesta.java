@@ -2,7 +2,9 @@ package com.github.saulmmbp.foroAlura.entity;
 
 import java.time.LocalDateTime;
 
-import com.github.saulmmbp.foroAlura.dto.RespuestaDto;
+import org.hibernate.annotations.CreationTimestamp;
+
+import com.github.saulmmbp.foroAlura.dto.*;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,6 +13,7 @@ import lombok.*;
 @Table(name = "respuestas")
 @Getter
 @Setter
+@EqualsAndHashCode(of = {"id", "autor", "topico"})
 @ToString(exclude = {"topico"})
 public class Respuesta {
 
@@ -23,29 +26,34 @@ public class Respuesta {
 	private String mensaje;
 
 	@Column(name = "fecha_creacion")
+	@CreationTimestamp
 	private LocalDateTime fechaCreacion;
 	
 	@Column(name = "solucion")
-	private Boolean solucion;
+	private Boolean solucion = false;
 	
 	/* Relations */
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "autor")
+	@ManyToOne
+	@JoinColumn(name = "autor", referencedColumnName = "id_usuario")
 	private Usuario autor;
 	
 	@ManyToOne
-	@JoinColumn(name = "topico")
+	@JoinColumn(name = "topico", referencedColumnName = "id_topico")
 	private Topico topico;
 	
-	public RespuestaDto toDto() {
-		RespuestaDto respuestaDto = new RespuestaDto(
-				id,
-				mensaje,
-				fechaCreacion,
-				solucion,
-				autor.toDto(),
-				topico.getId()
-				);
-		return respuestaDto;
+	public void update(RespuestaPutRequest RespuestaReq) {
+		if (RespuestaReq.mensaje() != null) {
+			this.mensaje = RespuestaReq.mensaje();
+		}
+		if (RespuestaReq.solucion() != null) {
+			this.solucion = RespuestaReq.solucion();
+			if(this.solucion) {
+				this.topico.setEstado(ESTADO.SOLUCIONADO);
+			}
+		}
+	}
+	
+	public RespuestaResponse toResponse() {
+		return new RespuestaResponse(id, mensaje, fechaCreacion, solucion, autor.toResponse(), topico.getId());
 	}
 }

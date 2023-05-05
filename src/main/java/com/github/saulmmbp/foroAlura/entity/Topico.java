@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.github.saulmmbp.foroAlura.dto.TopicoDto;
+import com.github.saulmmbp.foroAlura.dto.*;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,6 +15,7 @@ import lombok.*;
 @Table(name = "topicos")
 @Getter
 @Setter
+@EqualsAndHashCode(of = {"id", "autor", "curso"})
 @ToString(exclude = {"respuestas"})
 public class Topico {
 
@@ -35,23 +36,35 @@ public class Topico {
 
 	@Column(name = "estado")
 	@Enumerated(EnumType.STRING)
-	private ESTADO estado;
+	private ESTADO estado = ESTADO.NO_RESPONDIDO;
 
 	/* Relations */
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "autor")
+	@ManyToOne
+	@JoinColumn(name = "autor", referencedColumnName = "id_usuario")
 	private Usuario autor;
 
 	@ManyToOne
-	@JoinColumn(name = "curso")
+	@JoinColumn(name = "curso", referencedColumnName = "id_curso")
 	private Curso curso;
 	
-	@OneToMany(mappedBy = "topico", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "topico", cascade = CascadeType.ALL)
 	private Set<Respuesta> respuestas = new HashSet<>();
 
-	public TopicoDto toDto() {
-		return new TopicoDto(id, titulo, mensaje, fechaCreacion, estado, autor.toDto(), curso.toDto(),
-				respuestas.stream().map(Respuesta::toDto).collect(Collectors.toSet()));
+	public void update(TopicoPutRequest topicoReq) {
+		if (topicoReq.titulo() != null) {
+			this.titulo = topicoReq.titulo();
+		}
+		if (topicoReq.mensaje() != null) {
+			this.mensaje = topicoReq.mensaje();
+		}
+		if (topicoReq.estado() != null) {
+			this.estado = topicoReq.estado();
+		}
+	}
+	
+	public TopicoResponse toResponse() {
+		return new TopicoResponse(id, titulo, mensaje, fechaCreacion, estado, autor.toResponse(), curso.toResponse(),
+				respuestas.stream().map(Respuesta::toResponse).collect(Collectors.toSet()));
 	}
 
 }

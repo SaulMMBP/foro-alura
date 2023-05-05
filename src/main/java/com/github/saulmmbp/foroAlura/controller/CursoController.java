@@ -9,7 +9,7 @@ import org.springframework.hateoas.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.github.saulmmbp.foroAlura.dto.CursoDto;
+import com.github.saulmmbp.foroAlura.dto.*;
 import com.github.saulmmbp.foroAlura.service.CursoService;
 import com.github.saulmmbp.foroAlura.util.CursoModelAssembler;
 
@@ -28,30 +28,30 @@ public class CursoController {
 	}
 	
 	@GetMapping
-	public CollectionModel<EntityModel<CursoDto>> getCursos() {
-		List<EntityModel<CursoDto>> cursos = cursoService.findAll().stream()
+	public CollectionModel<EntityModel<CursoResponse>> getCursos() {
+		List<EntityModel<CursoResponse>> cursos = cursoService.findAll().stream()
 				.map(cursoAssembler::toModel)
 				.collect(Collectors.toList());
 		return CollectionModel.of(cursos, linkTo(methodOn(CursoController.class).getCursos()).withSelfRel());
 	}
 	
 	@GetMapping("/{id}")
-	public EntityModel<CursoDto> getCurso(@PathVariable Long id) {
-		CursoDto curso = cursoService.findById(id);
+	public EntityModel<CursoResponse> getCurso(@PathVariable Long id) {
+		CursoResponse curso = cursoService.findById(id);
 		return cursoAssembler.toModel(curso);
 	}
 	
 	@PostMapping
-	public ResponseEntity<EntityModel<CursoDto>> newCurso(@RequestBody @Valid CursoDto cursoDto) {
-		EntityModel<CursoDto> curso = cursoAssembler.toModel(cursoService.save(cursoDto));
+	public ResponseEntity<EntityModel<CursoResponse>> newCurso(@RequestBody @Valid CursoPostRequest cursoDto) {
+		EntityModel<CursoResponse> curso = cursoAssembler.toModel(cursoService.save(cursoDto));
 		return ResponseEntity
 				.created(curso.getRequiredLink(IanaLinkRelations.SELF).toUri())
 				.body(curso);
 	}
 	
-	@PutMapping("/{id}")
-	public ResponseEntity<EntityModel<CursoDto>> updateCurso(@RequestBody @Valid CursoDto cursoDto, @PathVariable Long id) {
-		EntityModel<CursoDto> curso = cursoAssembler.toModel(cursoService.update(cursoDto, id));
+	@PutMapping
+	public ResponseEntity<EntityModel<CursoResponse>> updateCurso(@RequestBody @Valid CursoPutRequest cursoDto) {
+		EntityModel<CursoResponse> curso = cursoAssembler.toModel(cursoService.update(cursoDto));
 		return ResponseEntity
 				.created(curso.getRequiredLink(IanaLinkRelations.SELF).toUri())
 				.body(curso);

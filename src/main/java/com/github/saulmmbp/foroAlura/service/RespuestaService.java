@@ -5,9 +5,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.github.saulmmbp.foroAlura.dao.RespuestaRepository;
-import com.github.saulmmbp.foroAlura.dto.RespuestaDto;
-import com.github.saulmmbp.foroAlura.entity.Respuesta;
+import com.github.saulmmbp.foroAlura.dao.*;
+import com.github.saulmmbp.foroAlura.dto.*;
+import com.github.saulmmbp.foroAlura.entity.*;
 
 import jakarta.transaction.Transactional;
 
@@ -16,30 +16,40 @@ import jakarta.transaction.Transactional;
 public class RespuestaService {
 
 	private RespuestaRepository respuestaRepository;
+	private UsuarioRepository usuarioRepository;
+	private TopicoRepository topicoRepository;
 
-	public RespuestaService(RespuestaRepository respuestaRepository) {
+	public RespuestaService(RespuestaRepository respuestaRepository, UsuarioRepository usuarioRepository,
+			TopicoRepository topicoRepository) {
 		this.respuestaRepository = respuestaRepository;
+		this.usuarioRepository = usuarioRepository;
+		this.topicoRepository = topicoRepository;
 	}
 	
-	public List<RespuestaDto> findAll() {
+	public List<RespuestaResponse> findAll() {
 		return respuestaRepository.findAll().stream()
-				.map(Respuesta::toDto)
+				.map(Respuesta::toResponse)
 				.collect(Collectors.toList());
 	}
 	
-	public RespuestaDto findById(Long id) {
-		return respuestaRepository.findById(id).orElseThrow().toDto();
+	public RespuestaResponse findById(Long id) {
+		return respuestaRepository.findById(id).orElseThrow().toResponse();
 	}
 	
-	public RespuestaDto save(RespuestaDto respuestaDto) {
-		return respuestaRepository.save(respuestaDto.toEntity()).toDto();
+	public RespuestaResponse save(RespuestaPostRequest respuestaReq) {
+		Usuario autor = usuarioRepository.findById(respuestaReq.autor_id()).orElseThrow();
+		Topico topico = topicoRepository.findById(respuestaReq.topico_id()).orElseThrow();
+		topico.setEstado(ESTADO.NO_SOLUCIONADO);
+		Respuesta respuesta = respuestaReq.toEntity();
+		respuesta.setAutor(autor);
+		respuesta.setTopico(topico);
+		return respuestaRepository.save(respuesta).toResponse();
 	}
 	
-	public RespuestaDto update(RespuestaDto respuestaDto, Long id) {
-		Respuesta respuesta = respuestaRepository.findById(id).orElseThrow();
-		respuesta.setMensaje(respuestaDto.mensaje());
-		respuesta.setSolucion(respuestaDto.solucion());
-		return respuestaRepository.save(respuesta).toDto();
+	public RespuestaResponse update(RespuestaPutRequest respuestaReq) {
+		Respuesta respuesta = respuestaRepository.findById(respuestaReq.id()).orElseThrow();
+		respuesta.update(respuestaReq);
+		return respuestaRepository.save(respuesta).toResponse();
 	}
 	
 	public void delete(Long id) {

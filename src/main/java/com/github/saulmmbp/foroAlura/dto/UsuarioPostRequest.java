@@ -1,21 +1,26 @@
 package com.github.saulmmbp.foroAlura.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.saulmmbp.foroAlura.entity.Usuario;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
-public record UsuarioDto(
-		@JsonIgnore Long id,
-		@NotNull String nombre,
-		@NotNull String email,
-		@JsonIgnore String contrasena
+public record UsuarioPostRequest(
+		
+		@NotBlank
+		String nombre,
+		
+		@NotBlank
+		String email,
+		
+		@NotBlank
+		String contrasena
+		
 		) {
 
 	public Usuario toEntity() {
 		Usuario usuario = new Usuario();
-		usuario.setId(id);
 		usuario.setNombre(nombre);
+		usuario.setEmail(email);
 		usuario.setContrasena(contrasena);
 		return usuario;
 	}

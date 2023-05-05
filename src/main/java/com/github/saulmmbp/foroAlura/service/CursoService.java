@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.github.saulmmbp.foroAlura.dao.CursoRepository;
-import com.github.saulmmbp.foroAlura.dto.CursoDto;
+import com.github.saulmmbp.foroAlura.dto.*;
 import com.github.saulmmbp.foroAlura.entity.Curso;
 
 import jakarta.transaction.Transactional;
@@ -21,25 +21,24 @@ public class CursoService {
 		this.cursoRepository = cursoRepository;
 	}
 	
-	public List<CursoDto> findAll() {
+	public List<CursoResponse> findAll() {
 		return cursoRepository.findAll().stream()
-				.map(Curso::toDto)
+				.map(Curso::toResponse)
 				.collect(Collectors.toList());
 	}
 	
-	public CursoDto findById(Long id) {
-		return cursoRepository.findById(id).orElseThrow().toDto();
+	public CursoResponse findById(Long id) {
+		return cursoRepository.findById(id).orElseThrow().toResponse();
 	}
 	
-	public CursoDto save(CursoDto cursoDto) {
-		return cursoRepository.save(cursoDto.toEntity()).toDto();
+	public CursoResponse save(CursoPostRequest curso) {
+		return cursoRepository.save(curso.toEntity()).toResponse();
 	}
 	
-	public CursoDto update(CursoDto cursoDto, Long id) {
-		Curso curso = cursoRepository.findById(id).orElseThrow();
-		curso.setNombre(cursoDto.nombre());
-		curso.setCategoria(cursoDto.categoria());
-		return cursoRepository.save(curso).toDto();
+	public CursoResponse update(CursoPutRequest cursoReq) {
+		Curso curso = cursoRepository.findById(cursoReq.id()).orElseThrow();
+		curso.update(cursoReq);
+		return cursoRepository.save(curso).toResponse();
 	}
 	
 	public void delete(Long id) {
