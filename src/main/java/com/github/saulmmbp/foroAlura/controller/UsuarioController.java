@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.github.saulmmbp.foroAlura.dto.*;
+import com.github.saulmmbp.foroAlura.dto.request.*;
+import com.github.saulmmbp.foroAlura.dto.response.UsuarioResponse;
 import com.github.saulmmbp.foroAlura.service.UsuarioService;
 import com.github.saulmmbp.foroAlura.util.UsuarioModelAssembler;
 

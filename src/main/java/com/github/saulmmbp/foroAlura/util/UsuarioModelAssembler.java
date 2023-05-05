@@ -7,7 +7,7 @@ import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
 import com.github.saulmmbp.foroAlura.controller.UsuarioController;
-import com.github.saulmmbp.foroAlura.dto.UsuarioResponse;
+import com.github.saulmmbp.foroAlura.dto.response.UsuarioResponse;
 
 @Component
 public class UsuarioModelAssembler implements RepresentationModelAssembler<UsuarioResponse, EntityModel<UsuarioResponse>> {

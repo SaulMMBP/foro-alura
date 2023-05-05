@@ -1,4 +1,4 @@
-package com.github.saulmmbp.foroAlura.dto;
+package com.github.saulmmbp.foroAlura.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 

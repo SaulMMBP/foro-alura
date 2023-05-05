@@ -7,7 +7,7 @@ import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
 import com.github.saulmmbp.foroAlura.controller.*;
-import com.github.saulmmbp.foroAlura.dto.TopicoResponse;
+import com.github.saulmmbp.foroAlura.dto.response.TopicoResponse;
 
 @Component
 public class TopicoModelAssembler implements RepresentationModelAssembler<TopicoResponse, EntityModel<TopicoResponse>> {

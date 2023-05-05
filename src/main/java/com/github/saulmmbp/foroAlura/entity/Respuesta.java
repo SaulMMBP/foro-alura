@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.github.saulmmbp.foroAlura.dto.*;
+import com.github.saulmmbp.foroAlura.dto.request.RespuestaPutRequest;
+import com.github.saulmmbp.foroAlura.dto.response.RespuestaResponse;
 
 import jakarta.persistence.*;
 import lombok.*;

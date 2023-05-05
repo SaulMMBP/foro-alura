@@ -1,4 +1,4 @@
-package com.github.saulmmbp.foroAlura.dto;
+package com.github.saulmmbp.foroAlura.dto.response;
 
 import java.time.LocalDateTime;
 

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.github.saulmmbp.foroAlura.dao.*;
 import com.github.saulmmbp.foroAlura.dto.*;
+import com.github.saulmmbp.foroAlura.dto.request.*;
+import com.github.saulmmbp.foroAlura.dto.response.TopicoResponse;
 import com.github.saulmmbp.foroAlura.entity.*;
 
 import jakarta.transaction.Transactional;
@@ -28,13 +30,13 @@ public class TopicoService {
 	}
 	
 	public List<TopicoResponse> findAll() {
-		return this.topicoRepository.findAll().stream()
+		return topicoRepository.findAll().stream()
 				.map(Topico::toResponse)
 				.collect(Collectors.toList());
 	}
 	
 	public TopicoResponse findById(Long id) {
-		return this.topicoRepository.findById(id).orElseThrow().toResponse();
+		return topicoRepository.findById(id).orElseThrow().toResponse();
 	}
 	
 	public TopicoResponse save(TopicoPostRequest topicoReq) {
@@ -43,16 +45,17 @@ public class TopicoService {
 		Topico topico = topicoReq.toEntity();
 		topico.setAutor(autor);
 		topico.setCurso(curso);
-		return this.topicoRepository.save(topico).toResponse();
+		return topicoRepository.save(topico).toResponse();
 	}
 	
 	public TopicoResponse update(TopicoPutRequest topicoReq) {
-		Topico topico = this.topicoRepository.findById(topicoReq.id()).orElseThrow();
+		Topico topico = topicoRepository.findById(topicoReq.id()).orElseThrow();
 		topico.update(topicoReq);
-		return this.topicoRepository.save(topico).toResponse();
+		return topicoRepository.save(topico).toResponse();
 	}
 	
 	public void delete(Long id) {
-		this.topicoRepository.deleteById(id);
+		topicoRepository.findById(id).orElseThrow();
+		topicoRepository.deleteById(id);
 	}
 }

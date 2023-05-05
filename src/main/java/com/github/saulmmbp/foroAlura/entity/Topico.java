@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.github.saulmmbp.foroAlura.dto.*;
+import com.github.saulmmbp.foroAlura.dto.request.TopicoPutRequest;
+import com.github.saulmmbp.foroAlura.dto.response.TopicoResponse;
 
 import jakarta.persistence.*;
 import lombok.*;

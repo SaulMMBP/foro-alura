@@ -3,6 +3,8 @@ package com.github.saulmmbp.foroAlura.entity;
 import java.util.Set;
 
 import com.github.saulmmbp.foroAlura.dto.*;
+import com.github.saulmmbp.foroAlura.dto.request.CursoPutRequest;
+import com.github.saulmmbp.foroAlura.dto.response.CursoResponse;
 
 import jakarta.persistence.*;
 import lombok.*;

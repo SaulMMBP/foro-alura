@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.github.saulmmbp.foroAlura.dao.*;
 import com.github.saulmmbp.foroAlura.dto.*;
+import com.github.saulmmbp.foroAlura.dto.request.*;
+import com.github.saulmmbp.foroAlura.dto.response.RespuestaResponse;
 import com.github.saulmmbp.foroAlura.entity.*;
 
 import jakarta.transaction.Transactional;
