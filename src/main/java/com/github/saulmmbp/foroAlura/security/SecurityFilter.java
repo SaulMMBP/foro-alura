@@ -43,8 +43,6 @@ public class SecurityFilter extends OncePerRequestFilter {
 				SecurityContextHolder.getContext().setAuthentication(auth);
 			}
 			
-		} else {
-			new RuntimeException("Token inválido");
 		}
 		filterChain.doFilter(request, response);
 	}

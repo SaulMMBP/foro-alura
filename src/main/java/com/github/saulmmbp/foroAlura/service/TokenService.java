@@ -2,6 +2,7 @@ package com.github.saulmmbp.foroAlura.service;
 
 import java.time.*;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -11,26 +12,31 @@ import com.auth0.jwt.exceptions.*;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.github.saulmmbp.foroAlura.entity.Usuario;
 
+import ch.qos.logback.classic.Logger;
+
 @Service
 public class TokenService {
 
 	private final String issuer = "foro alura";
+	private Logger logger = (Logger) LoggerFactory.getLogger(TokenService.class);
 	
 	@Value("${api.security.secret}")
 	private String secret;
 	
 	public String generateToken(Usuario usuario) {
+		String token = null;
 		try {
 		    Algorithm algorithm = Algorithm.HMAC256(secret);
-		    return JWT.create()
+		    token = JWT.create()
 		        .withIssuer(issuer)
 		        .withSubject(usuario.getEmail())
 		        .withClaim("id", usuario.getId())
 		        .withExpiresAt(generateExpirationDate())
 		        .sign(algorithm);
 		} catch (JWTCreationException exception){
-			throw new RuntimeException();
+			logger.error("Error al generar token el token");
 		}
+		return token;
 	}
 	
 	public boolean validateToken(String token) {
@@ -52,7 +58,8 @@ public class TokenService {
 		        
 		    decodedJWT = verifier.verify(token);
 		} catch (JWTVerificationException exception){
-			throw new RuntimeException("DecodedJWT inválido");
+			logger.info("Request con Token inválido");
+			return null;
 		}
 		return decodedJWT;
 	}
