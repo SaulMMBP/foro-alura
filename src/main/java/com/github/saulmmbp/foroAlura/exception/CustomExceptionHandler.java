@@ -12,7 +12,7 @@ import com.github.saulmmbp.foroAlura.dto.response.ErrorResponse;
 
 @RestControllerAdvice
 public class CustomExceptionHandler {
-
+	
 	@ExceptionHandler(NoSuchElementException.class)
 	public ResponseEntity<?> notFoundHandler() {
 		return ResponseEntity.notFound().build();
