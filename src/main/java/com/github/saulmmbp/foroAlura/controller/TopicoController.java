@@ -9,7 +9,6 @@ import org.springframework.hateoas.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.github.saulmmbp.foroAlura.dto.*;
 import com.github.saulmmbp.foroAlura.dto.request.*;
 import com.github.saulmmbp.foroAlura.dto.response.TopicoResponse;
 import com.github.saulmmbp.foroAlura.service.TopicoService;

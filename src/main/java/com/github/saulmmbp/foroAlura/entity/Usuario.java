@@ -6,7 +6,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.github.saulmmbp.foroAlura.dto.*;
 import com.github.saulmmbp.foroAlura.dto.request.UsuarioPutRequest;
 import com.github.saulmmbp.foroAlura.dto.response.UsuarioResponse;
 
