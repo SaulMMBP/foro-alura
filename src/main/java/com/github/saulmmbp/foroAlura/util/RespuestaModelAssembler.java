@@ -18,7 +18,11 @@ public class RespuestaModelAssembler implements RepresentationModelAssembler<Res
 				linkTo(methodOn(RespuestaController.class).getRespuesta(entity.id())).withSelfRel(),
 				linkTo(methodOn(UsuarioController.class).getUsuario(entity.autor().id())).withRel("autor"),
 				linkTo(methodOn(TopicoController.class).getTopico(entity.topico_id())).withRel("topico"),
-				linkTo(methodOn(RespuestaController.class).getRespuestas()).withRel("respuestas"));
+				linkTo(methodOn(RespuestaController.class)
+						.getRespuestas(Integer.parseInt(ForoConstants.DEFAULT_PAGE_NUMBER), 
+								Integer.parseInt(ForoConstants.DEFAULT_PAGE_SIZE), 
+								ForoConstants.DEFAULT_PAGE_SORT_BY, ForoConstants.DEFAULT_PAGE_ORDER_BY))
+				.withRel("respuestas"));
 	}
 
 }

@@ -16,7 +16,10 @@ public class UsuarioModelAssembler implements RepresentationModelAssembler<Usuar
 	public EntityModel<UsuarioResponse> toModel(UsuarioResponse entity) {
 		return EntityModel.of(entity, 
 				linkTo(methodOn(UsuarioController.class).getUsuario(entity.id())).withSelfRel(),
-				linkTo(methodOn(UsuarioController.class).getUsuarios()).withRel("usuarios"));
+				linkTo(methodOn(UsuarioController.class).getUsuarios(Integer.parseInt(ForoConstants.DEFAULT_PAGE_NUMBER), 
+						Integer.parseInt(ForoConstants.DEFAULT_PAGE_SIZE), 
+						ForoConstants.DEFAULT_PAGE_SORT_BY, ForoConstants.DEFAULT_PAGE_ORDER_BY))
+				.withRel("usuarios"));
 	}
 
 }

@@ -2,17 +2,16 @@ package com.github.saulmmbp.foroAlura.controller;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import org.springframework.data.domain.Page;
 import org.springframework.hateoas.*;
+import org.springframework.hateoas.PagedModel.PageMetadata;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.github.saulmmbp.foroAlura.dto.request.*;
 import com.github.saulmmbp.foroAlura.dto.response.RespuestaResponse;
 import com.github.saulmmbp.foroAlura.service.RespuestaService;
-import com.github.saulmmbp.foroAlura.util.RespuestaModelAssembler;
+import com.github.saulmmbp.foroAlura.util.*;
 
 import jakarta.validation.Valid;
 
@@ -29,11 +28,27 @@ public class RespuestaController {
 	}
 	
 	@GetMapping
-	public CollectionModel<EntityModel<RespuestaResponse>> getRespuestas() {
-		List<EntityModel<RespuestaResponse>> respuestas = respuestaService.findAll().stream()
-				.map(respuestaAssembler::toModel)
-				.collect(Collectors.toList());
-		return CollectionModel.of(respuestas, linkTo(methodOn(RespuestaController.class).getRespuestas()).withSelfRel());
+	public CollectionModel<EntityModel<RespuestaResponse>> getRespuestas(
+			@RequestParam(value = "page", defaultValue = ForoConstants.DEFAULT_PAGE_NUMBER, required = false) int page,
+			@RequestParam(value = "pageSize", defaultValue = ForoConstants.DEFAULT_PAGE_SIZE, required = false) int size, 
+			@RequestParam(value = "sortBy", defaultValue = ForoConstants.DEFAULT_PAGE_SORT_BY, required = false) String sortBy, 
+			@RequestParam(value = "orderBy", defaultValue = ForoConstants.DEFAULT_PAGE_ORDER_BY, required = false) String orderBy) {
+		
+		Page<EntityModel<RespuestaResponse>> respuestas = respuestaService.findAllPageable(page, size, sortBy, orderBy)
+				.map(respuestaAssembler::toModel);
+		
+		PagedModel<EntityModel<RespuestaResponse>> pagedModel = PagedModel.of(respuestas.getContent(), 
+				new PageMetadata(respuestas.getSize(), respuestas.getNumber(), respuestas.getTotalElements(), respuestas.getTotalPages()),
+				linkTo(methodOn(RespuestaController.class).getRespuestas(page, size, sortBy, orderBy)).withSelfRel());
+		
+		if (respuestas.hasNext()) {
+			pagedModel.add(linkTo(methodOn(RespuestaController.class).getRespuestas(page + 1, size, sortBy, orderBy)).withRel("next"));
+		}
+		if (respuestas.hasPrevious()) {
+			pagedModel.add(linkTo(methodOn(RespuestaController.class).getRespuestas(page - 1, size, sortBy, orderBy)).withRel("previous"));
+		}
+		
+		return pagedModel;
 	}
 	
 	@GetMapping("/{id}")

@@ -3,6 +3,7 @@ package com.github.saulmmbp.foroAlura.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import com.github.saulmmbp.foroAlura.dao.CursoRepository;
@@ -26,6 +27,13 @@ public class CursoService {
 		return cursoRepository.findAll().stream()
 				.map(Curso::toResponse)
 				.collect(Collectors.toList());
+	}
+	
+	public Page<CursoResponse> findAllPageable(int page, int pageSize, String sortBy, String orderBy) {
+		Sort sort = orderBy.equalsIgnoreCase(Sort.Direction.ASC.name()) ? 
+				Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+		Pageable pageable = PageRequest.of(page, pageSize, sort);
+		return cursoRepository.findAll(pageable).map(Curso::toResponse);
 	}
 	
 	public CursoResponse findById(Long id) {

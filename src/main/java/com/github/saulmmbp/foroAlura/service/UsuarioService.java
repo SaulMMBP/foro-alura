@@ -3,6 +3,7 @@ package com.github.saulmmbp.foroAlura.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import com.github.saulmmbp.foroAlura.dao.UsuarioRepository;
@@ -26,6 +27,13 @@ public class UsuarioService {
 		return usuarioRepository.findAll().stream()
 				.map(Usuario::toResponse)
 				.collect(Collectors.toList());
+	}
+	
+	public Page<UsuarioResponse> findAllPageable(int page, int size, String sortBy, String orderBy) {
+		Sort sort = orderBy.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
+				Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+		Pageable pageable = PageRequest.of(page, size, sort);
+		return usuarioRepository.findAll(pageable).map(Usuario::toResponse);
 	}
 	
 	public UsuarioResponse findById(Long id) {
