@@ -11,6 +11,20 @@ CREATE TABLE usuarios (
     PRIMARY KEY(id_usuario)
 );
 
+CREATE TABLE roles (
+    id_rol BIGINT AUTO_INCREMENT NOT NULL,
+    rol VARCHAR(100) NOT NULL,
+    PRIMARY KEY(id_rol)
+);
+
+CREATE TABLE usuarios_roles (
+    usuario_id BIGINT NOT NULL,
+    rol_id BIGINT NOT NULL,
+    PRIMARY KEY(usuario_id, rol_id),
+    FOREIGN KEY(usuario_id) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY(rol_id) REFERENCES roles(id_rol)
+);
+
 CREATE TABLE cursos (
     id_curso BIGINT AUTO_INCREMENT NOT NULL,
     nombre VARCHAR(200) NOT NULL UNIQUE,
@@ -48,7 +62,17 @@ CREATE TABLE respuestas (
 INSERT INTO usuarios(nombre, email, contrasena) VALUES 
     ('Saul Malagon', 'saul@mail.com', '$2a$12$YH38IqlU2boa9KFBVQtyt.MRsSsW3mk71FJWJZv6U/veAy.aSRkO2'),
     ('Daniel Juarez', 'daniel@mail.com', '$2a$12$wZG0LZzQWoP6rbn3i.SbPuEUOt4r/VDs9DpaMUzD6ktGQo1mjGVme');
+
+INSERT INTO roles(rol) VALUES
+    ('ROLE_USER'),
+    ('ROLE_ADMIN');
     
+INSERT INTO usuarios_roles VALUES
+    (1, 1),
+    (1, 2),
+    (2, 1);
+
+
 INSERT INTO cursos(nombre, categoria) VALUES
     ('Springboot rest api', 'java'),
     ('Introducción a machine learning', 'python');
