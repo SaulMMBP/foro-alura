@@ -1,6 +1,7 @@
 package com.github.saulmmbp.foroAlura.entity;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -41,6 +42,11 @@ public class Usuario implements UserDetails {
 	@OneToMany(mappedBy = "autor", cascade = CascadeType.ALL)
 	private Set<Respuesta> respuestas;
 	
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(joinColumns = @JoinColumn(name = "usuario_id"),
+			inverseJoinColumns = @JoinColumn(name = "rol_id"))
+	private List<Rol> roles;
+	
 	public void update(UsuarioPutRequest usuarioReq) {
 		if (usuarioReq.nombre() != null) {
 			this.nombre = usuarioReq.nombre();
@@ -59,7 +65,9 @@ public class Usuario implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+		return roles.stream()
+				.map(rol -> new SimpleGrantedAuthority(rol.getRol()))
+				.collect(Collectors.toList());
 	}
 
 	@Override
