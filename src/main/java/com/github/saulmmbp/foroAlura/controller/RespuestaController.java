@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.hateoas.*;
 import org.springframework.hateoas.PagedModel.PageMetadata;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.github.saulmmbp.foroAlura.dto.request.*;
@@ -58,22 +59,24 @@ public class RespuestaController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<EntityModel<RespuestaResponse>> newRespuesta(@RequestBody @Valid RespuestaPostRequest respuestaDto) {
-		EntityModel<RespuestaResponse> respuesta = respuestaAssembler.toModel(respuestaService.save(respuestaDto));
+	public ResponseEntity<EntityModel<RespuestaResponse>> newRespuesta(@RequestBody @Valid RespuestaPostRequest respuestaReq) {
+		EntityModel<RespuestaResponse> respuesta = respuestaAssembler.toModel(respuestaService.save(respuestaReq));
 		return ResponseEntity
 				.created(respuesta.getRequiredLink(IanaLinkRelations.SELF).toUri())
 				.body(respuesta);
 	}
 	
 	@PutMapping
-	public ResponseEntity<EntityModel<RespuestaResponse>> updateRespuesta(@RequestBody @Valid RespuestaPutRequest respuestaDto) {
-		EntityModel<RespuestaResponse> respuesta = respuestaAssembler.toModel(respuestaService.update(respuestaDto));
+	@PreAuthorize("#respuestaReq.autorId == authentication.principal.id")
+	public ResponseEntity<EntityModel<RespuestaResponse>> updateRespuesta(@RequestBody @Valid RespuestaPutRequest respuestaReq) {
+		EntityModel<RespuestaResponse> respuesta = respuestaAssembler.toModel(respuestaService.update(respuestaReq));
 		return ResponseEntity
 				.created(respuesta.getRequiredLink(IanaLinkRelations.SELF).toUri())
 				.body(respuesta);
 	}
 	
 	@DeleteMapping("/{id}")
+	@PreAuthorize("#id == authentication.principal.id")
 	public ResponseEntity<?> deleteRespuesta(@PathVariable Long id) {
 		respuestaService.delete(id);
 		return ResponseEntity.noContent().build();

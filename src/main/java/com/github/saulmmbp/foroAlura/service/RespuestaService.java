@@ -56,7 +56,8 @@ public class RespuestaService {
 	}
 	
 	public RespuestaResponse update(RespuestaPutRequest respuestaReq) {
-		Respuesta respuesta = respuestaRepository.findById(respuestaReq.id()).orElseThrow();
+		Usuario autor = usuarioRepository.findById(respuestaReq.autorId()).orElseThrow();
+		Respuesta respuesta = respuestaRepository.findByIdAndAutor(respuestaReq.id(), autor).orElseThrow();
 		respuesta.update(respuestaReq);
 		return respuestaRepository.save(respuesta).toResponse();
 	}

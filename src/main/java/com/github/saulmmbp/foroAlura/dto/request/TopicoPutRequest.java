@@ -13,7 +13,10 @@ public record TopicoPutRequest(
 		
 		String mensaje,
 		
-		ESTADO estado
+		ESTADO estado,
+		
+		@NotNull
+		Long autorId
 		
 		) {
 	

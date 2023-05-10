@@ -56,7 +56,8 @@ public class TopicoService {
 	}
 	
 	public TopicoResponse update(TopicoPutRequest topicoReq) {
-		Topico topico = topicoRepository.findById(topicoReq.id()).orElseThrow();
+		Usuario autor = usuarioRepository.findById(topicoReq.autorId()).orElseThrow();
+		Topico topico = topicoRepository.findByIdAndAutor(topicoReq.id(), autor).orElseThrow();
 		topico.update(topicoReq);
 		return topicoRepository.save(topico).toResponse();
 	}

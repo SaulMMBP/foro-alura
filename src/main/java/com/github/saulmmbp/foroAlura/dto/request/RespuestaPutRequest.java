@@ -9,7 +9,10 @@ public record RespuestaPutRequest(
 		
 		String mensaje,
 		
-		Boolean solucion
+		Boolean solucion,
+		
+		@NotNull
+		Long autorId
 		
 		) {
 

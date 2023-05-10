@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.hateoas.*;
 import org.springframework.hateoas.PagedModel.PageMetadata;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.github.saulmmbp.foroAlura.dto.request.*;
@@ -66,6 +67,7 @@ public class TopicoController {
 	}
 	
 	@PutMapping
+	@PreAuthorize("#topico.autorId == authentication.principal.id")
 	public ResponseEntity<EntityModel<TopicoResponse>> updateTopico(@RequestBody @Valid TopicoPutRequest topico) {
 		EntityModel<TopicoResponse> updatedTopico = this.topicoAssembler.toModel(topicoService.update(topico));
 		return ResponseEntity
@@ -74,6 +76,7 @@ public class TopicoController {
 	}
 	
 	@DeleteMapping("/{id}")
+	@PreAuthorize("#id == authentication.principal.id")
 	public ResponseEntity<?> deleteTopico(@PathVariable Long id) {
 		this.topicoService.delete(id);
 		return ResponseEntity.noContent().build();
