@@ -10,10 +10,10 @@ public record RespuestaPostRequest(
 		String mensaje,
 		
 		@NotNull
-		Long autor_id,
+		Long autorId,
 		
 		@NotNull
-		Long topico_id 
+		Long topicoId 
 		
 		) {
 

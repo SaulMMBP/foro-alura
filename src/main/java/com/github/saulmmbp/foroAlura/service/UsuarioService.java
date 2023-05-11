@@ -51,6 +51,7 @@ public class UsuarioService {
 	}
 	
 	public void delete(Long id) {
+		usuarioRepository.findById(id).orElseThrow();
 		usuarioRepository.deleteById(id);
 	}
 }

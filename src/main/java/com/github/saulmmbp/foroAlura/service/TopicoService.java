@@ -47,8 +47,8 @@ public class TopicoService {
 	}
 	
 	public TopicoResponse save(TopicoPostRequest topicoReq) {
-		Usuario autor = usuarioRepository.findById(topicoReq.autor_id()).orElseThrow();
-		Curso curso = cursoRepository.findById(topicoReq.curso_id()).orElseThrow();
+		Usuario autor = usuarioRepository.findById(topicoReq.autorId()).orElseThrow();
+		Curso curso = cursoRepository.findById(topicoReq.cursoId()).orElseThrow();
 		Topico topico = topicoReq.toEntity();
 		topico.setAutor(autor);
 		topico.setCurso(curso);

@@ -6,6 +6,7 @@ import org.springframework.data.domain.*;
 import org.springframework.hateoas.*;
 import org.springframework.hateoas.PagedModel.PageMetadata;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.github.saulmmbp.foroAlura.dto.request.*;
@@ -58,22 +59,25 @@ public class CursoController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<EntityModel<CursoResponse>> newCurso(@RequestBody @Valid CursoPostRequest cursoDto) {
-		EntityModel<CursoResponse> curso = cursoAssembler.toModel(cursoService.save(cursoDto));
+	@PreAuthorize("#cursoReq.instructorId == authentication.principal.id or hasRole('ADMIN')")
+	public ResponseEntity<EntityModel<CursoResponse>> newCurso(@RequestBody @Valid CursoPostRequest cursoReq) {
+		EntityModel<CursoResponse> curso = cursoAssembler.toModel(cursoService.save(cursoReq));
 		return ResponseEntity
 				.created(curso.getRequiredLink(IanaLinkRelations.SELF).toUri())
 				.body(curso);
 	}
 	
 	@PutMapping
-	public ResponseEntity<EntityModel<CursoResponse>> updateCurso(@RequestBody @Valid CursoPutRequest cursoDto) {
-		EntityModel<CursoResponse> curso = cursoAssembler.toModel(cursoService.update(cursoDto));
+	@PreAuthorize("#cursoReq.instructorId == authentication.principal.id or hasRole('ADMIN')")
+	public ResponseEntity<EntityModel<CursoResponse>> updateCurso(@RequestBody @Valid CursoPutRequest cursoReq) {
+		EntityModel<CursoResponse> curso = cursoAssembler.toModel(cursoService.update(cursoReq));
 		return ResponseEntity
 				.created(curso.getRequiredLink(IanaLinkRelations.SELF).toUri())
 				.body(curso);
 	}
 	
 	@DeleteMapping("/{id}")
+	@PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
 	public ResponseEntity<?> deleteCurso(@PathVariable Long id) {
 		cursoService.delete(id);
 		return ResponseEntity.noContent().build();

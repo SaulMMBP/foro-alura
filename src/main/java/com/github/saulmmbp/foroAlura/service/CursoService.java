@@ -6,10 +6,10 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import com.github.saulmmbp.foroAlura.dao.CursoRepository;
+import com.github.saulmmbp.foroAlura.dao.*;
 import com.github.saulmmbp.foroAlura.dto.request.*;
 import com.github.saulmmbp.foroAlura.dto.response.CursoResponse;
-import com.github.saulmmbp.foroAlura.entity.Curso;
+import com.github.saulmmbp.foroAlura.entity.*;
 
 import jakarta.transaction.Transactional;
 
@@ -18,9 +18,11 @@ import jakarta.transaction.Transactional;
 public class CursoService {
 
 	private CursoRepository cursoRepository;
+	private UsuarioRepository usuarioRepository;
 
-	public CursoService(CursoRepository cursoRepository) {
+	public CursoService(CursoRepository cursoRepository, UsuarioRepository usuarioRepository) {
 		this.cursoRepository = cursoRepository;
+		this.usuarioRepository = usuarioRepository;
 	}
 	
 	public List<CursoResponse> findAll() {
@@ -40,17 +42,22 @@ public class CursoService {
 		return cursoRepository.findById(id).orElseThrow().toResponse();
 	}
 	
-	public CursoResponse save(CursoPostRequest curso) {
-		return cursoRepository.save(curso.toEntity()).toResponse();
+	public CursoResponse save(CursoPostRequest cursoReq) {
+		Usuario instructor = usuarioRepository.findById(cursoReq.instructorId()).orElseThrow();
+		Curso newCurso = cursoReq.toEntity();
+		newCurso.setInstructor(instructor);
+		return cursoRepository.save(newCurso).toResponse();
 	}
 	
 	public CursoResponse update(CursoPutRequest cursoReq) {
-		Curso curso = cursoRepository.findById(cursoReq.id()).orElseThrow();
-		curso.update(cursoReq);
-		return cursoRepository.save(curso).toResponse();
+		Usuario instructor = usuarioRepository.findById(cursoReq.instructorId()).orElseThrow();
+		Curso updatedCurso = cursoRepository.findByIdAndInstructor(cursoReq.id(), instructor).orElseThrow();
+		updatedCurso.update(cursoReq);
+		return cursoRepository.save(updatedCurso).toResponse();
 	}
 	
 	public void delete(Long id) {
+		cursoRepository.findById(id).orElseThrow();
 		cursoRepository.deleteById(id);
 	}
 }

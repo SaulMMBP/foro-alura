@@ -67,7 +67,7 @@ public class UsuarioController {
 	}
 	
 	@PutMapping
-	@PreAuthorize("#usuarioReq.id == authentication.principal.id")
+	@PreAuthorize("#usuarioReq.id == authentication.principal.id or hasRole('ADMIN')")
 	public ResponseEntity<EntityModel<UsuarioResponse>> updateUsuario(@RequestBody @Valid UsuarioPutRequest usuarioReq) {
 		EntityModel<UsuarioResponse> usuario = usuarioAssembler.toModel(usuarioService.update(usuarioReq));
 		return ResponseEntity
@@ -76,7 +76,7 @@ public class UsuarioController {
 	}
 	
 	@DeleteMapping("/{id}")
-	@PreAuthorize("#id == authentication.principal.id")
+	@PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
 	public ResponseEntity<?> deleteUsuario(@PathVariable Long id) {
 		usuarioService.delete(id);
 		return ResponseEntity.noContent().build();

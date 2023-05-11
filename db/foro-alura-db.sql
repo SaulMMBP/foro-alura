@@ -29,7 +29,9 @@ CREATE TABLE cursos (
     id_curso BIGINT AUTO_INCREMENT NOT NULL,
     nombre VARCHAR(200) NOT NULL UNIQUE,
     categoria VARCHAR(100) NOT NULL,
-    PRIMARY KEY (id_curso)
+    instructor BIGINT NOT NULL,
+    PRIMARY KEY (id_curso),
+    FOREIGN KEY (instructor) REFERENCES usuarios(id_usuario)
 );
 
 CREATE TABLE topicos (
@@ -61,21 +63,25 @@ CREATE TABLE respuestas (
 
 INSERT INTO usuarios(nombre, email, contrasena) VALUES 
     ('Saul Malagon', 'saul@mail.com', '$2a$12$YH38IqlU2boa9KFBVQtyt.MRsSsW3mk71FJWJZv6U/veAy.aSRkO2'),
-    ('Daniel Juarez', 'daniel@mail.com', '$2a$12$wZG0LZzQWoP6rbn3i.SbPuEUOt4r/VDs9DpaMUzD6ktGQo1mjGVme');
+    ('Daniel Juarez', 'daniel@mail.com', '$2a$12$YH38IqlU2boa9KFBVQtyt.MRsSsW3mk71FJWJZv6U/veAy.aSRkO2'),
+    ('Alex William', 'will@mail.com', '$2a$12$YH38IqlU2boa9KFBVQtyt.MRsSsW3mk71FJWJZv6U/veAy.aSRkO2');
 
 INSERT INTO roles(rol) VALUES
     ('ROLE_USER'),
-    ('ROLE_ADMIN');
+    ('ROLE_ADMIN'),
+    ('ROLE_INSTRUCTOR');
     
 INSERT INTO usuarios_roles VALUES
     (1, 1),
     (1, 2),
-    (2, 1);
+    (2, 1),
+    (2, 3),
+    (3, 1);
 
 
-INSERT INTO cursos(nombre, categoria) VALUES
-    ('Springboot rest api', 'java'),
-    ('Introducción a machine learning', 'python');
+INSERT INTO cursos(nombre, categoria, instructor) VALUES
+    ('Springboot rest api', 'java', 2),
+    ('Introducción a machine learning', 'python', 2);
 
 INSERT INTO topicos(titulo, mensaje, fecha_creacion, estado, autor, curso) VALUES 
     ('Topico 1', 

@@ -67,7 +67,7 @@ public class TopicoController {
 	}
 	
 	@PutMapping
-	@PreAuthorize("#topico.autorId == authentication.principal.id")
+	@PreAuthorize("#topico.autorId == authentication.principal.id or hasRole('ADMIN')")
 	public ResponseEntity<EntityModel<TopicoResponse>> updateTopico(@RequestBody @Valid TopicoPutRequest topico) {
 		EntityModel<TopicoResponse> updatedTopico = this.topicoAssembler.toModel(topicoService.update(topico));
 		return ResponseEntity
@@ -76,7 +76,7 @@ public class TopicoController {
 	}
 	
 	@DeleteMapping("/{id}")
-	@PreAuthorize("#id == authentication.principal.id")
+	@PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
 	public ResponseEntity<?> deleteTopico(@PathVariable Long id) {
 		this.topicoService.delete(id);
 		return ResponseEntity.noContent().build();

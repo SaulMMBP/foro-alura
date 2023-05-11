@@ -10,7 +10,10 @@ public record CursoPostRequest(
 		String nombre,
 		
 		@NotNull
-		String categoria
+		String categoria,
+		
+		@NotNull
+		Long instructorId
 		
 		) {
 

@@ -9,7 +9,9 @@ public record CursoResponse(
 		
 		String nombre,
 		
-		String categoria
+		String categoria,
+		
+		UsuarioResponse instructor
 		
 		) {
 

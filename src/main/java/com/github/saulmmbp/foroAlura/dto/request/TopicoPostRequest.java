@@ -13,10 +13,10 @@ public record TopicoPostRequest(
 		String mensaje,
 		
 		@NotNull
-		Long autor_id,
+		Long autorId,
 		
 		@NotNull
-		Long curso_id
+		Long cursoId
 		
 		) {
 

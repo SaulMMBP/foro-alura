@@ -67,7 +67,7 @@ public class RespuestaController {
 	}
 	
 	@PutMapping
-	@PreAuthorize("#respuestaReq.autorId == authentication.principal.id")
+	@PreAuthorize("#respuestaReq.autorId == authentication.principal.id or hasRole('ADMIN')")
 	public ResponseEntity<EntityModel<RespuestaResponse>> updateRespuesta(@RequestBody @Valid RespuestaPutRequest respuestaReq) {
 		EntityModel<RespuestaResponse> respuesta = respuestaAssembler.toModel(respuestaService.update(respuestaReq));
 		return ResponseEntity
@@ -76,7 +76,7 @@ public class RespuestaController {
 	}
 	
 	@DeleteMapping("/{id}")
-	@PreAuthorize("#id == authentication.principal.id")
+	@PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
 	public ResponseEntity<?> deleteRespuesta(@PathVariable Long id) {
 		respuestaService.delete(id);
 		return ResponseEntity.noContent().build();

@@ -28,6 +28,10 @@ public class Curso {
 	
 	@OneToMany(mappedBy = "curso", cascade = CascadeType.ALL)
 	private Set<Topico> topicos;
+	
+	@ManyToOne
+	@JoinColumn(name = "instructor", referencedColumnName = "id_usuario")
+	private Usuario instructor;
 
 	public void update(CursoPutRequest cursoReq) {
 		if (cursoReq.nombre() != null) {
@@ -39,6 +43,6 @@ public class Curso {
 	}
 
 	public CursoResponse toResponse() {
-		return new CursoResponse(id, nombre, categoria);
+		return new CursoResponse(id, nombre, categoria, instructor.toResponse());
 	}
 }

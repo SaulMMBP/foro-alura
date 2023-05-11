@@ -46,8 +46,8 @@ public class RespuestaService {
 	}
 	
 	public RespuestaResponse save(RespuestaPostRequest respuestaReq) {
-		Usuario autor = usuarioRepository.findById(respuestaReq.autor_id()).orElseThrow();
-		Topico topico = topicoRepository.findById(respuestaReq.topico_id()).orElseThrow();
+		Usuario autor = usuarioRepository.findById(respuestaReq.autorId()).orElseThrow();
+		Topico topico = topicoRepository.findById(respuestaReq.topicoId()).orElseThrow();
 		topico.setEstado(ESTADO.NO_SOLUCIONADO);
 		Respuesta respuesta = respuestaReq.toEntity();
 		respuesta.setAutor(autor);
@@ -63,6 +63,7 @@ public class RespuestaService {
 	}
 	
 	public void delete(Long id) {
+		respuestaRepository.findById(id).orElseThrow();
 		respuestaRepository.deleteById(id);
 	}
 }
