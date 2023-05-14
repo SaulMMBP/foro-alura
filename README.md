@@ -101,6 +101,36 @@ Practice project - Alura Challenge ONE
 Saul Malagon Martinez  
 smalagonmtz@gmail.com  
 
+### /login
+
+#### POST
+##### Summary:
+
+Obtiene un Token JWT
+
+##### Request body
+
+```json
+{
+  "email": "string",
+  "contrasena": "string"
+}
+```
+
+##### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
+
+```json
+{
+  "jwtToken": "string"
+}
+```
+
+
+
 ### /usuarios
 
 #### GET
@@ -123,11 +153,50 @@ Obtiene una lista paginada de todos los usuarios
 | ---- | ----------- |
 | 200 | OK |
 
+```json
+{
+  "_embedded": {
+    "usuarios": [
+      {
+        "id": 0,
+        "nombre": "string",
+        "email": "string",
+        "_links": {
+          "self": {
+            "href": "string"
+          },
+          "usuarios": {
+            "href": "string"
+          }
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "next": {
+      "href": "string"
+    },
+    "previous": {
+      "href": "string"
+    }
+  },
+  "page": {
+    "size": 0,
+    "totalElements": 0,
+    "totalPages": 0,
+    "number": 0
+  }
+}
+```
+
 ##### Security
 
-| Security Schema |
-| --- |
-| Foro_Alura_Auth |
+| Security Auth | Format | Header | Sample |
+| --- | --- | --- | --- |
+| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
 
 #### PUT
 ##### Summary:
@@ -138,11 +207,38 @@ Modifica la información de un usuario
 
 Solo los usuarios con rol `ADMIN` pueden modificar la información de cualquier usuario, los usuarios sin rol `ADMIN` solo pueden modificar su propia información.
 
+##### Request body
+
+```json
+{
+  "id": 0,
+  "nombre": "string",
+  "email": "string",
+  "contrasena": "string"
+}
+```
+
 ##### Responses
 
 | Code | Description |
 | ---- | ----------- |
 | 200 | OK |
+
+```json
+{
+  "id": 0,
+  "nombre": "string",
+  "email": "string",
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "usuarios": {
+      "href": "string"
+    }
+  }
+}
+```
 
 ##### Security
 
@@ -155,240 +251,43 @@ Solo los usuarios con rol `ADMIN` pueden modificar la información de cualquier 
 
 Crea un nuevo usuario
 
+##### Request body
+
+```json
+{
+  "nombre": "string",
+  "email": "string",
+  "contrasena": "string"
+}
+```
+
 ##### Responses
 
 | Code | Description |
 | ---- | ----------- |
 | 200 | OK |
+
+```json
+{
+  "id": 0,
+  "nombre": "string",
+  "email": "string",
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "usuarios": {
+      "href": "string"
+    }
+  }
+}
+```
 
 ##### Security
 
-| Security Schema |
-| --- |
-| Foro_Alura_Auth |
-
-### /topicos
-
-#### GET
-##### Summary:
-
-Obtiene una lista paginada de todos los topicos
-
-##### Parameters
-
-| Name | Located in | Required | Schema |
-| ---- | ---------- | -------- | ---- |
-| page | query | No | integer |
-| pageSize | query | No | integer |
-| sortBy | query | No | string |
-| orderBy | query | No | string |
-
-##### Responses
-
-| Code | Description |
-| ---- | ----------- |
-| 200 | OK |
-
-##### Security
-
-| Security Schema |
-| --- |
-| Foro_Alura_Auth |
-
-#### PUT
-##### Summary:
-
-Modifica la información de un tópico
-
-##### Description:
-
-Solo el autor del tópico o un usuario con rol `ADMIN` pueden modificar la información del mismo
-
-##### Responses
-
-| Code | Description |
-| ---- | ----------- |
-| 200 | OK |
-
-##### Security
-
-| Security Schema |
-| --- |
-| Foro_Alura_Auth |
-
-#### POST
-##### Summary:
-
-Crea un tópico
-
-##### Description:
-
-El autor del tópico será usuario loggeado
-
-##### Responses
-
-| Code | Description |
-| ---- | ----------- |
-| 200 | OK |
-
-##### Security
-
-| Security Schema |
-| --- |
-| Foro_Alura_Auth |
-
-### /respuestas
-
-#### GET
-##### Summary:
-
-Obtiene un lista paginada de todas las respuestas a tópicos
-
-##### Parameters
-
-| Name | Located in | Required | Schema |
-| ---- | ---------- | -------- | ---- |
-| page | query | No | integer |
-| pageSize | query | No | integer |
-| sortBy | query | No | string |
-| orderBy | query | No | string |
-
-##### Responses
-
-| Code | Description |
-| ---- | ----------- |
-| 200 | OK |
-
-##### Security
-
-| Security Schema |
-| --- |
-| Foro_Alura_Auth |
-
-#### PUT
-##### Summary:
-
-Modifica la información de una respuesta
-
-##### Description:
-
-Solo el autor o un usuario con rol `ADMIN` pueden modificar la información de una respuesta.
-
-##### Responses
-
-| Code | Description |
-| ---- | ----------- |
-| 200 | OK |
-
-##### Security
-
-| Security Schema |
-| --- |
-| Foro_Alura_Auth |
-
-#### POST
-##### Summary:
-
-Crea una respuesta a un tópico específico
-
-##### Description:
-
-El autor de la respuesta será el usuario loggeado.
-
-##### Responses
-
-| Code | Description |
-| ---- | ----------- |
-| 200 | OK |
-
-##### Security
-
-| Security Schema |
-| --- |
-| Foro_Alura_Auth |
-
-### /cursos
-
-#### GET
-##### Summary:
-
-Obtiene una lista paginada de todos los cursos
-
-##### Parameters
-
-| Name | Located in | Required | Schema |
-| ---- | ---------- | -------- | ---- |
-| page | query | No | integer |
-| pageSize | query | No | integer |
-| sortBy | query | No | string |
-| orderBy | query | No | string |
-
-##### Responses
-
-| Code | Description |
-| ---- | ----------- |
-| 200 | OK |
-
-##### Security
-
-| Security Schema |
-| --- |
-| Foro_Alura_Auth |
-
-#### PUT
-##### Summary:
-
-Modifica la información de un curso
-
-##### Description:
-
-Solo el instructor del curso o un usuario con rol `ADMIN` pueden modificar la información de un curso.
-
-##### Responses
-
-| Code | Description |
-| ---- | ----------- |
-| 200 | OK |
-
-##### Security
-
-| Security Schema |
-| --- |
-| Foro_Alura_Auth |
-
-#### POST
-##### Summary:
-
-Crea un curso
-
-##### Description:
-
-Solo los usuarios con rol `ADMIN` y/o `INSTRUCTOR` pueden crear cursos.
-
-##### Responses
-
-| Code | Description |
-| ---- | ----------- |
-| 200 | OK |
-
-##### Security
-
-| Security Schema |
-| --- |
-| Foro_Alura_Auth |
-
-### /login
-
-#### POST
-##### Summary:
-
-Obtiene un Token JWT
-
-##### Responses
-
-| Code | Description |
-| ---- | ----------- |
-| 200 | OK |
+| Security Auth | Format | Header | Sample |
+| --- | --- | --- | --- |
+| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
 
 ### /usuarios/{id}
 
@@ -409,11 +308,27 @@ Obtiene un usuario por su id
 | ---- | ----------- |
 | 200 | OK |
 
+```json
+{
+  "id": 0,
+  "nombre": "string",
+  "email": "string",
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "usuarios": {
+      "href": "string"
+    }
+  }
+}
+```
+
 ##### Security
 
-| Security Schema |
-| --- |
-| Foro_Alura_Auth |
+| Security Auth | Format | Header | Sample |
+| --- | --- | --- | --- |
+| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
 
 #### DELETE
 ##### Summary:
@@ -438,9 +353,391 @@ Solo los usuarios con rol `ADMIN` puden eliminar cualquier usuario, los usuarios
 
 ##### Security
 
-| Security Schema |
-| --- |
-| Foro_Alura_Auth |
+| Security Auth | Format | Header | Sample |
+| --- | --- | --- | --- |
+| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
+
+### /topicos
+
+#### GET
+##### Summary:
+
+Obtiene una lista paginada de todos los topicos
+
+##### Parameters
+
+| Name | Located in | Required | Schema |
+| ---- | ---------- | -------- | ---- |
+| page | query | No | integer |
+| pageSize | query | No | integer |
+| sortBy | query | No | string |
+| orderBy | query | No | string |
+
+##### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
+
+```json
+{
+  "_embedded": {
+    "topicos": [
+      {
+        "id": 0,
+        "titulo": "string",
+        "mensaje": "string",
+        "fechaCreacion": "2023-05-14T22:32:46.951Z",
+        "estado": "NO_RESPONDIDO",
+        "autor": {
+          "id": 0,
+          "nombre": "string",
+          "email": "string",
+          "_links": {
+            "self": {
+              "href": "string"
+            },
+            "usuarios": {
+              "href": "string"
+            }
+          }
+        },
+        "curso": {
+          "id": 0,
+          "nombre": "string",
+          "categoria": "string",
+          "instructor": {
+            "id": 0,
+            "nombre": "string",
+            "email": "string",
+            "_links": {
+              "self": {
+                "href": "string"
+              },
+              "usuarios": {
+                "href": "string"
+              }
+            }
+          },
+          "_links": {
+            "self": {
+              "href": "string"
+            },
+            "cursos": {
+              "href": "string"
+            }
+          }
+        },
+        "respuestas": [
+          {
+            "id": 0,
+            "mensaje": "string",
+            "fechaCreacion": "2023-05-14T22:32:46.951Z",
+            "solucion": true,
+            "autor": {
+              "id": 0,
+              "nombre": "string",
+              "email": "string",
+              "_links": {
+                "self": {
+                  "href": "string"
+                },
+                "usuarios": {
+                  "href": "string"
+                }
+              }
+            },
+            "_links": {
+              "self": {
+                "href": "string"
+              },
+              "autor": {
+                "href": "string"
+              },
+              "topico": {
+                "href": "string"
+              },
+              "respuestas": {
+                "href": "string"
+              }
+            }
+          }
+        ],
+        "_links": {
+          "self": {
+            "href": "string"
+          },
+          "topicos": {
+            "href": "string"
+          }
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "next": {
+      "href": "string"
+    },
+    "previous": {
+      "href": "string"
+    }
+  },
+  "page": {
+    "size": 0,
+    "totalElements": 0,
+    "totalPages": 0,
+    "number": 0
+  }
+}
+```
+
+##### Security
+
+| Security Auth | Format | Header | Sample |
+| --- | --- | --- | --- |
+| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
+
+#### PUT
+##### Summary:
+
+Modifica la información de un tópico
+
+##### Description:
+
+Solo el autor del tópico o un usuario con rol `ADMIN` pueden modificar la información del mismo
+
+##### Request body
+
+```json
+{
+  "id": 0,
+  "titulo": "string",
+  "mensaje": "string",
+  "fechaCreacion": "2023-05-14T22:54:09.339Z",
+  "estado": "NO_RESPONDIDO",
+  "autor": {
+    "id": 0,
+    "nombre": "string",
+    "email": "string",
+    "_links": {
+      "self": {
+        "href": "string"
+      },
+      "usuarios": {
+        "href": "string"
+      }
+    }
+  },
+  "curso": {
+    "id": 0,
+    "nombre": "string",
+    "categoria": "string",
+    "instructor": {
+      "id": 0,
+      "nombre": "string",
+      "email": "string",
+      "_links": {
+        "self": {
+          "href": "string"
+        },
+        "usuarios": {
+          "href": "string"
+        }
+      }
+    },
+    "_links": {
+      "self": {
+        "href": "string"
+      },
+      "cursos": {
+        "href": "string"
+      }
+    }
+  },
+  "respuestas": [
+    {
+      "id": 0,
+      "mensaje": "string",
+      "fechaCreacion": "2023-05-14T22:54:09.339Z",
+      "solucion": true,
+      "autor": {
+        "id": 0,
+        "nombre": "string",
+        "email": "string",
+        "_links": {
+          "self": {
+            "href": "string"
+          },
+          "usuarios": {
+            "href": "string"
+          }
+        }
+      },
+      "_links": {
+        "self": {
+          "href": "string"
+        },
+        "autor": {
+          "href": "string"
+        },
+        "topico": {
+          "href": "string"
+        },
+        "respuestas": {
+          "href": "string"
+        }
+      }
+    }
+  ],
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "topicos": {
+      "href": "string"
+    }
+  }
+}
+```
+
+##### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
+
+##### Security
+
+| Security Auth | Format | Header | Sample |
+| --- | --- | --- | --- |
+| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |S
+
+#### POST
+##### Summary:
+
+Crea un tópico
+
+##### Description:
+
+El autor del tópico será usuario loggeado
+
+##### Request body
+
+```json
+{
+  "titulo": "string",
+  "mensaje": "string",
+  "autorId": 0,
+  "cursoId": 0
+}
+```
+
+##### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
+
+```json
+{
+  "id": 0,
+  "titulo": "string",
+  "mensaje": "string",
+  "fechaCreacion": "2023-05-14T22:59:05.031Z",
+  "estado": "NO_RESPONDIDO",
+  "autor": {
+    "id": 0,
+    "nombre": "string",
+    "email": "string",
+    "_links": {
+      "self": {
+        "href": "string"
+      },
+      "usuarios": {
+        "href": "string"
+      }
+    }
+  },
+  "curso": {
+    "id": 0,
+    "nombre": "string",
+    "categoria": "string",
+    "instructor": {
+      "id": 0,
+      "nombre": "string",
+      "email": "string",
+      "_links": {
+        "self": {
+          "href": "string"
+        },
+        "usuarios": {
+          "href": "string"
+        }
+      }
+    },
+    "_links": {
+      "self": {
+        "href": "string"
+      },
+      "cursos": {
+        "href": "string"
+      }
+    }
+  },
+  "respuestas": [
+    {
+      "id": 0,
+      "mensaje": "string",
+      "fechaCreacion": "2023-05-14T22:59:05.031Z",
+      "solucion": true,
+      "autor": {
+        "id": 0,
+        "nombre": "string",
+        "email": "string",
+        "_links": {
+          "self": {
+            "href": "string"
+          },
+          "usuarios": {
+            "href": "string"
+          }
+        }
+      },
+      "_links": {
+        "self": {
+          "href": "string"
+        },
+        "autor": {
+          "href": "string"
+        },
+        "topico": {
+          "href": "string"
+        },
+        "respuestas": {
+          "href": "string"
+        }
+      }
+    }
+  ],
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "topicos": {
+      "href": "string"
+    }
+  }
+}
+```
+
+##### Security
+
+| Security Auth | Format | Header | Sample |
+| --- | --- | --- | --- |
+| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
 
 ### /topicos/{id}
 
@@ -461,11 +758,103 @@ Obtiene un tópico por su id
 | ---- | ----------- |
 | 200 | OK |
 
+```json
+{
+  "id": 0,
+  "titulo": "string",
+  "mensaje": "string",
+  "fechaCreacion": "2023-05-14T23:04:19.431Z",
+  "estado": "NO_RESPONDIDO",
+  "autor": {
+    "id": 0,
+    "nombre": "string",
+    "email": "string",
+    "_links": {
+      "self": {
+        "href": "string"
+      },
+      "usuarios": {
+        "href": "string"
+      }
+    }
+  },
+  "curso": {
+    "id": 0,
+    "nombre": "string",
+    "categoria": "string",
+    "instructor": {
+      "id": 0,
+      "nombre": "string",
+      "email": "string",
+      "_links": {
+        "self": {
+          "href": "string"
+        },
+        "usuarios": {
+          "href": "string"
+        }
+      }
+    },
+    "_links": {
+      "self": {
+        "href": "string"
+      },
+      "cursos": {
+        "href": "string"
+      }
+    }
+  },
+  "respuestas": [
+    {
+      "id": 0,
+      "mensaje": "string",
+      "fechaCreacion": "2023-05-14T23:04:19.431Z",
+      "solucion": true,
+      "autor": {
+        "id": 0,
+        "nombre": "string",
+        "email": "string",
+        "_links": {
+          "self": {
+            "href": "string"
+          },
+          "usuarios": {
+            "href": "string"
+          }
+        }
+      },
+      "_links": {
+        "self": {
+          "href": "string"
+        },
+        "autor": {
+          "href": "string"
+        },
+        "topico": {
+          "href": "string"
+        },
+        "respuestas": {
+          "href": "string"
+        }
+      }
+    }
+  ],
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "topicos": {
+      "href": "string"
+    }
+  }
+}
+```
+
 ##### Security
 
-| Security Schema |
-| --- |
-| Foro_Alura_Auth |
+| Security Auth | Format | Header | Sample |
+| --- | --- | --- | --- |
+| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
 
 #### DELETE
 ##### Summary:
@@ -490,9 +879,225 @@ Solo el autor del tópico o un usuario con rol `ADMIN` puede eliminar el mismo.
 
 ##### Security
 
-| Security Schema |
-| --- |
-| Foro_Alura_Auth |
+| Security Auth | Format | Header | Sample |
+| --- | --- | --- | --- |
+| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
+
+### /respuestas
+
+#### GET
+##### Summary:
+
+Obtiene un lista paginada de todas las respuestas a tópicos
+
+##### Parameters
+
+| Name | Located in | Required | Schema |
+| ---- | ---------- | -------- | ---- |
+| page | query | No | integer |
+| pageSize | query | No | integer |
+| sortBy | query | No | string |
+| orderBy | query | No | string |
+
+##### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
+
+```json
+{
+  "_embedded": {
+    "respuestas": [
+      {
+        "id": 0,
+        "mensaje": "string",
+        "fechaCreacion": "2023-05-14T22:14:07.970Z",
+        "solucion": true,
+        "autor": {
+          "id": 0,
+          "nombre": "string",
+          "email": "string",
+          "_links": {
+            "self": {
+              "href": "string"
+            },
+            "usuarios": {
+              "href": "string"
+            }
+          }
+        },
+        "_links": {
+          "self": {
+            "href": "string"
+          },
+          "autor": {
+            "href": "string"
+          },
+          "topico": {
+            "href": "string"
+          },
+          "respuestas": {
+            "href": "string"
+          }
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "string"
+    }
+  },
+  "page": {
+    "size": 0,
+    "totalElements": 0,
+    "totalPages": 0,
+    "number": 0
+  }
+}
+```
+
+##### Security
+
+| Security Auth | Format | Header | Sample |
+| --- | --- | --- | --- |
+| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
+
+#### PUT
+##### Summary:
+
+Modifica la información de una respuesta
+
+##### Description:
+
+Solo el autor o un usuario con rol `ADMIN` pueden modificar la información de una respuesta.
+
+##### Request body
+
+```json
+{
+  "id": 0,
+  "mensaje": "string",
+  "solucion": true,
+  "autorId": 0
+}
+```
+
+##### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
+
+```json
+{
+  "id": 0,
+  "mensaje": "string",
+  "fechaCreacion": "2023-05-14T22:18:06.027Z",
+  "solucion": true,
+  "autor": {
+    "id": 0,
+    "nombre": "string",
+    "email": "string",
+    "_links": {
+      "self": {
+        "href": "string"
+      },
+      "usuarios": {
+        "href": "string"
+      }
+    }
+  },
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "autor": {
+      "href": "string"
+    },
+    "topico": {
+      "href": "string"
+    },
+    "respuestas": {
+      "href": "string"
+    }
+  }
+}
+```
+
+##### Security
+
+| Security Auth | Format | Header | Sample |
+| --- | --- | --- | --- |
+| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
+
+#### POST
+##### Summary:
+
+Crea una respuesta a un tópico específico
+
+##### Description:
+
+El autor de la respuesta será el usuario loggeado.
+
+##### Request body
+
+```json
+{
+  "mensaje": "string",
+  "autorId": 0,
+  "topicoId": 0
+}
+```
+
+##### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
+
+```json
+{
+  "id": 0,
+  "mensaje": "string",
+  "fechaCreacion": "2023-05-14T22:27:35.762Z",
+  "solucion": true,
+  "autor": {
+    "id": 0,
+    "nombre": "string",
+    "email": "string",
+    "_links": {
+      "self": {
+        "href": "string"
+      },
+      "usuarios": {
+        "href": "string"
+      }
+    }
+  },
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "autor": {
+      "href": "string"
+    },
+    "topico": {
+      "href": "string"
+    },
+    "respuestas": {
+      "href": "string"
+    }
+  }
+}
+```
+
+##### Security
+
+| Security Auth | Format | Header | Sample |
+| --- | --- | --- | --- |
+| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
 
 ### /respuestas/{id}
 
@@ -513,11 +1118,48 @@ Obtiene una respuesta por su id
 | ---- | ----------- |
 | 200 | OK |
 
+```json
+{
+  "id": 0,
+  "mensaje": "string",
+  "fechaCreacion": "2023-05-14T22:29:59.541Z",
+  "solucion": true,
+  "autor": {
+    "id": 0,
+    "nombre": "string",
+    "email": "string",
+    "_links": {
+      "self": {
+        "href": "string"
+      },
+      "usuarios": {
+        "href": "string"
+      }
+    }
+  },
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "autor": {
+      "href": "string"
+    },
+    "topico": {
+      "href": "string"
+    },
+    "respuestas": {
+      "href": "string"
+    }
+
+  }
+}
+```
+
 ##### Security
 
-| Security Schema |
-| --- |
-| Foro_Alura_Auth |
+| Security Auth | Format | Header | Sample |
+| --- | --- | --- | --- |
+| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
 
 #### DELETE
 ##### Summary:
@@ -542,9 +1184,205 @@ Solo el autor o un usuario con rol `ADMIN` pueden eliminar una respuesta.
 
 ##### Security
 
-| Security Schema |
-| --- |
-| Foro_Alura_Auth |
+| Security Auth | Format | Header | Sample |
+| --- | --- | --- | --- |
+| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
+
+
+### /cursos
+
+#### GET
+##### Summary:
+
+Obtiene una lista paginada de todos los cursos
+
+##### Parameters
+
+| Name | Located in | Required | Schema |
+| ---- | ---------- | -------- | ---- |
+| page | query | No | integer |
+| pageSize | query | No | integer |
+| sortBy | query | No | string |
+| orderBy | query | No | string |
+
+##### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
+
+```json
+{
+  "_embedded": {
+    "cursos": [
+      {
+        "id": 0,
+        "nombre": "string",
+        "categoria": "string",
+        "instructor": {
+          "id": 0,
+          "nombre": "string",
+          "email": "string",
+          "_links": {
+            "self": {
+              "href": "string"
+            },
+            "usuarios": {
+              "href": "string"
+            }
+          }
+        },
+        "_links": {
+          "self": {
+            "href": "string"
+          },
+          "cursos": {
+            "href": "string"
+          }
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "string"
+    }
+  },
+  "page": {
+    "size": 0,
+    "totalElements": 0,
+    "totalPages": 0,
+    "number": 0
+  }
+}
+```
+
+##### Security
+
+| Security Auth | Format | Header | Sample |
+| --- | --- | --- | --- |
+| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
+
+#### PUT
+##### Summary:
+
+Modifica la información de un curso
+
+##### Description:
+
+Solo el instructor del curso o un usuario con rol `ADMIN` pueden modificar la información de un curso.
+
+##### Request Body
+
+```json
+{
+  "id": 0,
+  "nombre": "string",
+  "categoria": "string",
+  "instructorId": 0
+}
+```
+
+##### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
+
+```json
+{
+  "id": 0,
+  "nombre": "string",
+  "categoria": "string",
+  "instructor": {
+    "id": 0,
+    "nombre": "string",
+    "email": "string",
+    "_links": {
+      "self": {
+        "href": "string"
+      },
+      "usuarios": {
+        "href": "string"
+      }
+    }
+  },
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "cursos": {
+      "href": "string"
+    }
+  }
+}
+```
+
+##### Security
+
+| Security Auth | Format | Header | Sample |
+| --- | --- | --- | --- |
+| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
+
+#### POST
+##### Summary:
+
+Crea un curso
+
+##### Description:
+
+Solo los usuarios con rol `ADMIN` y/o `INSTRUCTOR` pueden crear cursos.
+
+##### Request body
+
+```json
+{
+  "nombre": "string",
+  "categoria": "string",
+  "instructorId": 0
+}
+```
+
+##### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
+
+```json
+{
+  "id": 0,
+  "nombre": "string",
+  "categoria": "string",
+  "instructor": {
+    "id": 0,
+    "nombre": "string",
+    "email": "string",
+    "_links": {
+      "self": {
+        "href": "string"
+      },
+      "usuarios": {
+        "href": "string"
+      }
+    }
+  },
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "cursos": {
+      "href": "string"
+    }
+  }
+}
+```
+
+##### Security
+
+| Security Auth | Format | Header | Sample |
+| --- | --- | --- | --- |
+| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
 
 ### /cursos/{id}
 
@@ -565,11 +1403,40 @@ Obtiene un curso por su id
 | ---- | ----------- |
 | 200 | OK |
 
+```json
+{
+  "id": 0,
+  "nombre": "string",
+  "categoria": "string",
+  "instructor": {
+    "id": 0,
+    "nombre": "string",
+    "email": "string",
+    "_links": {
+      "self": {
+        "href": "string"
+      },
+      "usuarios": {
+        "href": "string"
+      }
+    }
+  },
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "cursos": {
+      "href": "string"
+    }
+  }
+}
+```
+
 ##### Security
 
-| Security Schema |
-| --- |
-| Foro_Alura_Auth |
+| Security Auth | Format | Header | Sample |
+| --- | --- | --- | --- |
+| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
 
 #### DELETE
 ##### Summary:
@@ -594,6 +1461,6 @@ Solo el instructor del curso o un usuario con rol `ADMIN` pueden eliminar un cur
 
 ##### Security
 
-| Security Schema |
-| --- |
-| Foro_Alura_Auth |
+| Security Auth | Format | Header | Sample |
+| --- | --- | --- | --- |
+| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
