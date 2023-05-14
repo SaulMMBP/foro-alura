@@ -80,845 +80,508 @@ erDiagram
      - SECURITY_SECRET: cualquier string, yo le puse "quesadilla"
 4. Una vez en ejecución, puedes utilizar postman para realizar las peticiones, pero primero debes realizar una petición a "/login" con los datos de algún usuario de la base de datos para recibir un token con el que podrás realizar peticiones a cualquier otro endpoint por hasta 2 horas. Pasando las 2 horas, tendrás que loggearte de nuevo.
 
-## Samples
-### Login
-- Obtener JWT Token
+# Foro Alura API DOCS
+Practice project - Alura Challenge ONE
 
-Request
-```json
-{
-    "email": "saul@mail.com",
-    "contrasena": "1234"
-}
-```
+## Version: 1.0.0
 
-General Headers
-```
-URL: http://localhost:8080/login
-Method: POST
-Status Code: 200 OK
-```
+**Contact information:**  
+Saul Malagon Martinez  
+smalagonmtz@gmail.com  
 
-Response 
-```json
-{
-    "jwtToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJmb3JvIGFsdXJhIiwic3ViIjoic2F1bEBtYWlsLmNvbSIsImlkIjoxLCJleHAiOjE2ODM0MDQ5Mjh9.w6Vk0RCLVxRx5Cz9YKr78WQM96C9u8vK6BV7Sk7z2K4"
-}
-```
+### /usuarios
 
-### Usuarios
--  Obtener todos los usuarios
+#### GET
+##### Summary:
 
-General Headers
-```
-URL: http://localhost:8080/usuarios
-Method: GET
-Status Code: 200 OK
-```
+Obtiene una lista paginada de todos los usuarios
 
-Response
-```json
-{
-    "_embedded": {
-        "usuarios": [
-            {
-                "id": 1,
-                "nombre": "Saul Malagon",
-                "email": "saul@mail.com",
-                "_links": {
-                    "self": {
-                        "href": "http://localhost:8080/usuarios/1"
-                    },
-                    "usuarios": {
-                        "href": "http://localhost:8080/usuarios"
-                    }
-                }
-            },
-            {
-                "id": 2,
-                "nombre": "Daniel Juarez",
-                "email": "daniel@mail.com",
-                "_links": {
-                    "self": {
-                        "href": "http://localhost:8080/usuarios/2"
-                    },
-                    "usuarios": {
-                        "href": "http://localhost:8080/usuarios"
-                    }
-                }
-            }
-        ]
-    },
-    "_links": {
-        "self": {
-            "href": "http://localhost:8080/usuarios"
-        }
-    }
-}
-```
+##### Parameters
 
-- Obtener usuario con id 1
+| Name | Located in | Required | Schema |
+| ---- | ---------- | -------- | ---- |
+| page | query | No | integer |
+| pageSize | query | No | integer |
+| sortBy | query | No | string |
+| orderBy | query | No | string |
 
-General Headers
-```
-URL: http://localhost:8080/usuarios/1
-Method: GET
-Status Code: 200 OK
-```
-Resposne
-```json
-{
-    "id": 1,
-    "nombre": "Saul Malagon",
-    "email": "saul@mail.com",
-    "_links": {
-        "self": {
-            "href": "http://localhost:8080/usuarios/1"
-        },
-        "usuarios": {
-            "href": "http://localhost:8080/usuarios"
-        }
-    }
-}
-```
+##### Responses
 
--  Crear nuevo usuario
-Request
-```json
-{
-    "nombre": "Alejandro Lopez",
-    "email": "alopez@mail.com",
-    "contrasena": "1234"
-}
-```
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
 
-General Headers
-```
-URL: http://localhost:8080/usuarios
-Method: POST
-Status Code: 201 Created
-```
+##### Security
 
-Response
-```json
-{
-    "id": 3,
-    "nombre": "Alejandro Lopez",
-    "email": "alopez@mail.com",
-    "_links": {
-        "self": {
-            "href": "http://localhost:8080/usuarios/3"
-        },
-        "usuarios": {
-            "href": "http://localhost:8080/usuarios"
-        }
-    }
-}
-```
-- Actualizar datos de usuario
+| Security Schema |
+| --- |
+| Foro_Alura_Auth |
 
-Campos actualizables
--   - nombre: string
-    - email: string 
-    - contrasena: string
+#### PUT
+##### Summary:
 
-Request
-```json
-{
-    "id": 3,
-    "email": "alex.lopez@mail.com"
-}
-```
+Modifica la información de un usuario
 
-General Headers
-```
-URL: http://localhost:8080/usuarios
-Method: PUT
-Status Code: 201 Created
-```
+##### Description:
 
-Response
-```json
-{
-    "id": 3,
-    "nombre": "Alejandro Lopez",
-    "email": "alex.lopez@mail.com",
-    "_links": {
-        "self": {
-            "href": "http://localhost:8080/usuarios/3"
-        },
-        "usuarios": {
-            "href": "http://localhost:8080/usuarios"
-        }
-    }
-}
-```
-- Eliminar usuario con id 3
+Solo los usuarios con rol `ADMIN` pueden modificar la información de cualquier usuario, los usuarios sin rol `ADMIN` solo pueden modificar su propia información.
 
-General Headers 
-```
-URL: http://localhost:8080/usuarios/3
-Method: DELETE
-Status Code: 204 No Content
-```
+##### Responses
 
-### Cursos
-- Obtener todos los cursos
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
 
-General Headers
-```
-URL: http://localhost:8080/cursos
-Method: GET
-Status Code: 200 OK
-```
+##### Security
 
-Response
-```json
-{
-    "_embedded": {
-        "cursos": [
-            {
-                "id": 1,
-                "nombre": "Springboot rest api",
-                "categoria": "java",
-                "_links": {
-                    "self": {
-                        "href": "http://localhost:8080/cursos/1"
-                    },
-                    "cursos": {
-                        "href": "http://localhost:8080/cursos"
-                    }
-                }
-            },
-            {
-                "id": 2,
-                "nombre": "Introducción a machine learning",
-                "categoria": "python",
-                "_links": {
-                    "self": {
-                        "href": "http://localhost:8080/cursos/2"
-                    },
-                    "cursos": {
-                        "href": "http://localhost:8080/cursos"
-                    }
-                }
-            }
-        ]
-    },
-    "_links": {
-        "self": {
-            "href": "http://localhost:8080/cursos"
-        }
-    }
-}
-```
+| Security Schema |
+| --- |
+| Foro_Alura_Auth |
 
-- Obtener curso con id 1
+#### POST
+##### Summary:
 
-General Headers
-```
-URL: http://localhost:8080/cursos/1
-Method: GET
-Status Code: 200 OK
-```
+Crea un nuevo usuario
 
-Response 
-```json
-{
-    "id": 1,
-    "nombre": "Springboot rest api",
-    "categoria": "java",
-    "_links": {
-        "self": {
-            "href": "http://localhost:8080/cursos/1"
-        },
-        "cursos": {
-            "href": "http://localhost:8080/cursos"
-        }
-    }
-}
-```
+##### Responses
 
-- Crear nuevo curso
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
 
-Request
-```json
-{
-    "nombre": "Java SE",
-    "categoria": "Tecnología"
-}
-```
+##### Security
 
-General Headers
-```
-URL: http://localhost:8080/cursos
-Method: POST
-Status Code: 201 Created
-```
+| Security Schema |
+| --- |
+| Foro_Alura_Auth |
 
-Response
-```json
-{
-    "id": 3,
-    "nombre": "Java SE",
-    "categoria": "Tecnología",
-    "_links": {
-        "self": {
-            "href": "http://localhost:8080/cursos/3"
-        },
-        "cursos": {
-            "href": "http://localhost:8080/cursos"
-        }
-    }
-}
-```
+### /topicos
 
-- Actualizar datos de curso
+#### GET
+##### Summary:
 
-Campos actualizables
--   - nombre: string
-    - categoria: string
+Obtiene una lista paginada de todos los topicos
 
-Request
-```json
-{
-    "id": 3,
-    "categoria": "java"
-}
-```
+##### Parameters
 
-General Headers
-```
-URL: http://localhost:8080/cursos
-Method: PUT
-Status Code: 201 Created
-```
+| Name | Located in | Required | Schema |
+| ---- | ---------- | -------- | ---- |
+| page | query | No | integer |
+| pageSize | query | No | integer |
+| sortBy | query | No | string |
+| orderBy | query | No | string |
 
-Response
-```json
-{
-    "id": 3,
-    "nombre": "Java SE",
-    "categoria": "java",
-    "_links": {
-        "self": {
-            "href": "http://localhost:8080/cursos/3"
-        },
-        "cursos": {
-            "href": "http://localhost:8080/cursos"
-        }
-    }
-}
-```
+##### Responses
 
-- Eliminar curso con id 3
-```
-URL: http://localhost:8080/cursos/3
-Method: DELETE
-Status Code: 204 No Content
-```
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
 
-### Topicos
-- Obtener todos los topicos
+##### Security
 
-General Headers
-```
-URL: http://localhost:8080/topicos
-Method: GET
-Status Code: 200 OK
-```
+| Security Schema |
+| --- |
+| Foro_Alura_Auth |
 
-Response
-```json
-{
-    "_embedded": {
-        "topicos": [
-            {
-                "id": 1,
-                "titulo": "Topico 1",
-                "mensaje": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas volutpat finibus purus nec tempor. Cras vulputate pellentesque ligula \n    venenatis volutpat. Maecenas cursus tempus mi, non interdum lectus porta nec. Ut cursus ligula eu rhoncus euismod. Integer sit amet maximus \n    dui, ut cursus mauris. Sed sed ligula ut lacus interdum efficitur. Sed at metus varius nisl pellentesque blandit sit amet non tortor. \n    In sed diam et dolor euismod semper. Cras luctus at leo sit amet rhoncus.",
-                "fechaCreacion": "2023-05-02T00:00:00",
-                "estado": "NO_SOLUCIONADO",
-                "autor": {
-                    "id": 1,
-                    "nombre": "Saul Malagon",
-                    "email": "saul@mail.com"
-                },
-                "curso": {
-                    "id": 1,
-                    "nombre": "Springboot rest api",
-                    "categoria": "java"
-                },
-                "respuestas": [
-                    {
-                        "id": 1,
-                        "mensaje": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                        "fechaCreacion": "2023-05-03T00:00:00",
-                        "solucion": false,
-                        "autor": {
-                            "id": 2,
-                            "nombre": "Daniel Juarez",
-                            "email": "daniel@mail.com"
-                        }
-                    }
-                ],
-                "_links": {
-                    "self": {
-                        "href": "http://localhost:8080/topicos/1"
-                    },
-                    "autor": {
-                        "href": "http://localhost:8080/usuarios/1"
-                    },
-                    "curso": {
-                        "href": "http://localhost:8080/cursos/1"
-                    },
-                    "topicos": {
-                        "href": "http://localhost:8080/topicos"
-                    }
-                }
-            },
-            {
-                "id": 2,
-                "titulo": "Topico 2",
-                "mensaje": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas volutpat finibus purus nec tempor. Cras vulputate pellentesque ligula \n    venenatis volutpat. Maecenas cursus tempus mi, non interdum lectus porta nec. Ut cursus ligula eu rhoncus euismod. Integer sit amet maximus \n    dui, ut cursus mauris. Sed sed ligula ut lacus interdum efficitur. Sed at metus varius nisl pellentesque blandit sit amet non tortor. \n    In sed diam et dolor euismod semper. Cras luctus at leo sit amet rhoncus.",
-                "fechaCreacion": "2023-05-03T00:00:00",
-                "estado": "NO_SOLUCIONADO",
-                "autor": {
-                    "id": 2,
-                    "nombre": "Daniel Juarez",
-                    "email": "daniel@mail.com"
-                },
-                "curso": {
-                    "id": 2,
-                    "nombre": "Introducción a machine learning",
-                    "categoria": "python"
-                },
-                "respuestas": [
-                    {
-                        "id": 2,
-                        "mensaje": "Maecenas cursus tempus mi, non interdum lectus porta nec. Ut cursus ligula eu rhoncus euismod. Integer sit amet maximus \n    dui, ut cursus mauris.",
-                        "fechaCreacion": "2023-05-03T00:00:00",
-                        "solucion": true,
-                        "autor": {
-                            "id": 1,
-                            "nombre": "Saul Malagon",
-                            "email": "saul@mail.com"
-                        }
-                    }
-                ],
-                "_links": {
-                    "self": {
-                        "href": "http://localhost:8080/topicos/2"
-                    },
-                    "autor": {
-                        "href": "http://localhost:8080/usuarios/2"
-                    },
-                    "curso": {
-                        "href": "http://localhost:8080/cursos/2"
-                    },
-                    "topicos": {
-                        "href": "http://localhost:8080/topicos"
-                    }
-                }
-            }
-        ]
-    },
-    "_links": {
-        "self": {
-            "href": "http://localhost:8080/topicos"
-        }
-    }
-}
-```
+#### PUT
+##### Summary:
 
-- Obtener usuario con id 1
+Modifica la información de un tópico
 
-General headers
-```
-URL: http://localhost:8080/topicos/1
-Method: GET
-Status Code: 200 OK
-```
+##### Description:
 
-Response
-```json
-{
-    "id": 1,
-    "titulo": "Topico 1",
-    "mensaje": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas volutpat finibus purus nec tempor. Cras vulputate pellentesque ligula \n    venenatis volutpat. Maecenas cursus tempus mi, non interdum lectus porta nec. Ut cursus ligula eu rhoncus euismod. Integer sit amet maximus \n    dui, ut cursus mauris. Sed sed ligula ut lacus interdum efficitur. Sed at metus varius nisl pellentesque blandit sit amet non tortor. \n    In sed diam et dolor euismod semper. Cras luctus at leo sit amet rhoncus.",
-    "fechaCreacion": "2023-05-02T00:00:00",
-    "estado": "NO_SOLUCIONADO",
-    "autor": {
-        "id": 1,
-        "nombre": "Saul Malagon",
-        "email": "saul@mail.com"
-    },
-    "curso": {
-        "id": 1,
-        "nombre": "Springboot rest api",
-        "categoria": "java"
-    },
-    "respuestas": [
-        {
-            "id": 1,
-            "mensaje": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-            "fechaCreacion": "2023-05-03T00:00:00",
-            "solucion": false,
-            "autor": {
-                "id": 2,
-                "nombre": "Daniel Juarez",
-                "email": "daniel@mail.com"
-            }
-        }
-    ],
-    "_links": {
-        "self": {
-            "href": "http://localhost:8080/topicos/1"
-        },
-        "autor": {
-            "href": "http://localhost:8080/usuarios/1"
-        },
-        "curso": {
-            "href": "http://localhost:8080/cursos/1"
-        },
-        "topicos": {
-            "href": "http://localhost:8080/topicos"
-        }
-    }
-}
-```
+Solo el autor del tópico o un usuario con rol `ADMIN` pueden modificar la información del mismo
 
-- Crear nuevo topico
+##### Responses
 
-Request
-```json
-{
-    "titulo": "Topico 3",
-    "mensaje": "Donec tincidunt metus ut risus faucibus, luctus tempor neque luctus. Etiam quis luctus metus. Pellentesque non lacus nec diam consequat faucibus. In bibendum nisi lobortis dictum luctus. Suspendisse consectetur ut leo et congue. Interdum et malesuada fames ac ante ipsum primis in faucibus. Praesent cursus feugiat bibendum. Nullam sed sollicitudin augue. Nullam cursus eu ante ac posuere.",
-    "autor_id": 1,
-    "curso_id": 1
-}
-```
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
 
-General Headers
-```
-URL: http://localhost:8080/topicos
-Method: POST
-Status Code: 201 Created
-```
+##### Security
 
-Response
-```json
-{
-    "id": 3,
-    "titulo": "Topico 3",
-    "mensaje": "Donec tincidunt metus ut risus faucibus, luctus tempor neque luctus. Etiam quis luctus metus. Pellentesque non lacus nec diam consequat faucibus. In bibendum nisi lobortis dictum luctus. Suspendisse consectetur ut leo et congue. Interdum et malesuada fames ac ante ipsum primis in faucibus. Praesent cursus feugiat bibendum. Nullam sed sollicitudin augue. Nullam cursus eu ante ac posuere.",
-    "fechaCreacion": "2023-05-06T13:39:26.8561181",
-    "estado": "NO_RESPONDIDO",
-    "autor": {
-        "id": 1,
-        "nombre": "Saul Malagon",
-        "email": "saul@mail.com"
-    },
-    "curso": {
-        "id": 1,
-        "nombre": "Springboot rest api",
-        "categoria": "java"
-    },
-    "respuestas": [],
-    "_links": {
-        "self": {
-            "href": "http://localhost:8080/topicos/3"
-        },
-        "autor": {
-            "href": "http://localhost:8080/usuarios/1"
-        },
-        "curso": {
-            "href": "http://localhost:8080/cursos/1"
-        },
-        "topicos": {
-            "href": "http://localhost:8080/topicos"
-        }
-    }
-}
-```
+| Security Schema |
+| --- |
+| Foro_Alura_Auth |
 
-- Actualizar datos de topico
+#### POST
+##### Summary:
 
-Campos actualizables
--   - titulo: string
-    - mensaje: string
-    - estado: string(NO_SOLUCIONADO, SOLUCIONADO, CERRADO)
+Crea un tópico
 
-Request
-```json
-{
-    "id": 3,
-    "mensaje": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-}
-```
+##### Description:
 
-General headers
-```
-URL: http://localhost:8080/topicos
-Method: PUT
-Status Code: 201 Created
-```
+El autor del tópico será usuario loggeado
 
-Response
-```json
-{
-    "id": 3,
-    "titulo": "Topico 3",
-    "mensaje": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
-    "fechaCreacion": "2023-05-06T00:00:00",
-    "estado": "NO_RESPONDIDO",
-    "autor": {
-        "id": 1,
-        "nombre": "Saul Malagon",
-        "email": "saul@mail.com"
-    },
-    "curso": {
-        "id": 1,
-        "nombre": "Springboot rest api",
-        "categoria": "java"
-    },
-    "respuestas": [],
-    "_links": {
-        "self": {
-            "href": "http://localhost:8080/topicos/3"
-        },
-        "autor": {
-            "href": "http://localhost:8080/usuarios/1"
-        },
-        "curso": {
-            "href": "http://localhost:8080/cursos/1"
-        },
-        "topicos": {
-            "href": "http://localhost:8080/topicos"
-        }
-    }
-}
-```
+##### Responses
 
-- Eliminar topico don id 3
-```
-URL: http://localhost:8080/topicos/3
-Method: DELETE
-Status Code: 204 No Content
-```
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
 
-### Respuestas
-- Obtener todas las respuestas
+##### Security
 
-General headers
-```
-URL: http://localhost:8080/respuestas
-Method: GET
-Status Code: 200 OK
-```
+| Security Schema |
+| --- |
+| Foro_Alura_Auth |
 
-Response
-```json
-{
-    "_embedded": {
-        "respuestas": [
-            {
-                "id": 1,
-                "mensaje": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                "fechaCreacion": "2023-05-03T00:00:00",
-                "solucion": false,
-                "autor": {
-                    "id": 2,
-                    "nombre": "Daniel Juarez",
-                    "email": "daniel@mail.com"
-                },
-                "_links": {
-                    "self": {
-                        "href": "http://localhost:8080/respuestas/1"
-                    },
-                    "autor": {
-                        "href": "http://localhost:8080/usuarios/2"
-                    },
-                    "topico": {
-                        "href": "http://localhost:8080/topicos/1"
-                    },
-                    "respuestas": {
-                        "href": "http://localhost:8080/respuestas"
-                    }
-                }
-            },
-            {
-                "id": 2,
-                "mensaje": "Maecenas cursus tempus mi, non interdum lectus porta nec. Ut cursus ligula eu rhoncus euismod. Integer sit amet maximus \n    dui, ut cursus mauris.",
-                "fechaCreacion": "2023-05-03T00:00:00",
-                "solucion": true,
-                "autor": {
-                    "id": 1,
-                    "nombre": "Saul Malagon",
-                    "email": "saul@mail.com"
-                },
-                "_links": {
-                    "self": {
-                        "href": "http://localhost:8080/respuestas/2"
-                    },
-                    "autor": {
-                        "href": "http://localhost:8080/usuarios/1"
-                    },
-                    "topico": {
-                        "href": "http://localhost:8080/topicos/2"
-                    },
-                    "respuestas": {
-                        "href": "http://localhost:8080/respuestas"
-                    }
-                }
-            }
-        ]
-    },
-    "_links": {
-        "self": {
-            "href": "http://localhost:8080/respuestas"
-        }
-    }
-}
-```
+### /respuestas
 
-- Obtener respuesta con id 1
+#### GET
+##### Summary:
 
-General headers
-```
-URL: http://localhost:8080/respuestas/1
-Method: GET
-Status Code: 200 OK
-```
+Obtiene un lista paginada de todas las respuestas a tópicos
 
-Response
-```json
-{
-    "id": 1,
-    "mensaje": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    "fechaCreacion": "2023-05-03T00:00:00",
-    "solucion": false,
-    "autor": {
-        "id": 2,
-        "nombre": "Daniel Juarez",
-        "email": "daniel@mail.com"
-    },
-    "_links": {
-        "self": {
-            "href": "http://localhost:8080/respuestas/1"
-        },
-        "autor": {
-            "href": "http://localhost:8080/usuarios/2"
-        },
-        "topico": {
-            "href": "http://localhost:8080/topicos/1"
-        },
-        "respuestas": {
-            "href": "http://localhost:8080/respuestas"
-        }
-    }
-}
-```
-- Crear nueva respuesta
+##### Parameters
 
-Request
-```json
-{
-    "mensaje": "jajajajajaja",
-    "autor_id": 1,
-    "topico_id": 1
-}
-```
+| Name | Located in | Required | Schema |
+| ---- | ---------- | -------- | ---- |
+| page | query | No | integer |
+| pageSize | query | No | integer |
+| sortBy | query | No | string |
+| orderBy | query | No | string |
 
-General Headers
-```
-URL: http://localhost:8080/respuestas
-Method: POST
-Status Code: 201 Created
-```
+##### Responses
 
-Response
-```json
-{
-    "id": 3,
-    "mensaje": "jajajajajaja",
-    "fechaCreacion": "2023-05-06T13:49:29.9938836",
-    "solucion": false,
-    "autor": {
-        "id": 1,
-        "nombre": "Saul Malagon",
-        "email": "saul@mail.com"
-    },
-    "_links": {
-        "self": {
-            "href": "http://localhost:8080/respuestas/3"
-        },
-        "autor": {
-            "href": "http://localhost:8080/usuarios/1"
-        },
-        "topico": {
-            "href": "http://localhost:8080/topicos/1"
-        },
-        "respuestas": {
-            "href": "http://localhost:8080/respuestas"
-        }
-    }
-}
-```
-- Actualizar respuesta con id 3
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
 
-Campos actualizables
--   - mensaje: string
-    - solucion: boolean
+##### Security
 
-Request
-```json
-{
-    "id": 3,
-    "solucion": true
-}
-```
+| Security Schema |
+| --- |
+| Foro_Alura_Auth |
 
-General headers
-```
-URL: http://localhost:8080/respuestas
-Method: PUT
-Status Code: 201 Created
-```
+#### PUT
+##### Summary:
 
-Response
-```json
-{
-    "id": 3,
-    "mensaje": "jajajajajaja",
-    "fechaCreacion": "2023-05-06T00:00:00",
-    "solucion": true,
-    "autor": {
-        "id": 1,
-        "nombre": "Saul Malagon",
-        "email": "saul@mail.com"
-    },
-    "_links": {
-        "self": {
-            "href": "http://localhost:8080/respuestas/3"
-        },
-        "autor": {
-            "href": "http://localhost:8080/usuarios/1"
-        },
-        "topico": {
-            "href": "http://localhost:8080/topicos/1"
-        },
-        "respuestas": {
-            "href": "http://localhost:8080/respuestas"
-        }
-    }
-}
-```
-- Eliminar respuesta con id 3
-```
-URL: http://localhost:8080/respuestas/3
-Method: DELETE
-Status Code: 204 No Content
-```
+Modifica la información de una respuesta
 
+##### Description:
+
+Solo el autor o un usuario con rol `ADMIN` pueden modificar la información de una respuesta.
+
+##### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
+
+##### Security
+
+| Security Schema |
+| --- |
+| Foro_Alura_Auth |
+
+#### POST
+##### Summary:
+
+Crea una respuesta a un tópico específico
+
+##### Description:
+
+El autor de la respuesta será el usuario loggeado.
+
+##### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
+
+##### Security
+
+| Security Schema |
+| --- |
+| Foro_Alura_Auth |
+
+### /cursos
+
+#### GET
+##### Summary:
+
+Obtiene una lista paginada de todos los cursos
+
+##### Parameters
+
+| Name | Located in | Required | Schema |
+| ---- | ---------- | -------- | ---- |
+| page | query | No | integer |
+| pageSize | query | No | integer |
+| sortBy | query | No | string |
+| orderBy | query | No | string |
+
+##### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
+
+##### Security
+
+| Security Schema |
+| --- |
+| Foro_Alura_Auth |
+
+#### PUT
+##### Summary:
+
+Modifica la información de un curso
+
+##### Description:
+
+Solo el instructor del curso o un usuario con rol `ADMIN` pueden modificar la información de un curso.
+
+##### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
+
+##### Security
+
+| Security Schema |
+| --- |
+| Foro_Alura_Auth |
+
+#### POST
+##### Summary:
+
+Crea un curso
+
+##### Description:
+
+Solo los usuarios con rol `ADMIN` y/o `INSTRUCTOR` pueden crear cursos.
+
+##### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
+
+##### Security
+
+| Security Schema |
+| --- |
+| Foro_Alura_Auth |
+
+### /login
+
+#### POST
+##### Summary:
+
+Obtiene un Token JWT
+
+##### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
+
+### /usuarios/{id}
+
+#### GET
+##### Summary:
+
+Obtiene un usuario por su id
+
+##### Parameters
+
+| Name | Located in | Required | Schema |
+| ---- | ---------- | -------- | ---- |
+| id | path | Yes | long |
+
+##### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
+
+##### Security
+
+| Security Schema |
+| --- |
+| Foro_Alura_Auth |
+
+#### DELETE
+##### Summary:
+
+Elimina un usuario por su id
+
+##### Description:
+
+Solo los usuarios con rol `ADMIN` puden eliminar cualquier usuario, los usuarios sin rol `ADMIN` solo pueden eliminar su propia cuenta.
+
+##### Parameters
+
+| Name | Located in | Required | Schema |
+| ---- | ---------- | -------- | ---- |
+| id | path | Yes | long |
+
+##### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
+
+##### Security
+
+| Security Schema |
+| --- |
+| Foro_Alura_Auth |
+
+### /topicos/{id}
+
+#### GET
+##### Summary:
+
+Obtiene un tópico por su id
+
+##### Parameters
+
+| Name | Located in | Required | Schema |
+| ---- | ---------- | -------- | ---- |
+| id | path | Yes | long |
+
+##### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
+
+##### Security
+
+| Security Schema |
+| --- |
+| Foro_Alura_Auth |
+
+#### DELETE
+##### Summary:
+
+Elmina un tópico
+
+##### Description:
+
+Solo el autor del tópico o un usuario con rol `ADMIN` puede eliminar el mismo.
+
+##### Parameters
+
+| Name | Located in | Required | Schema |
+| ---- | ---------- | -------- | ---- |
+| id | path | Yes | long |
+
+##### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
+
+##### Security
+
+| Security Schema |
+| --- |
+| Foro_Alura_Auth |
+
+### /respuestas/{id}
+
+#### GET
+##### Summary:
+
+Obtiene una respuesta por su id
+
+##### Parameters
+
+| Name | Located in | Required | Schema |
+| ---- | ---------- | -------- | ---- |
+| id | path | Yes | long |
+
+##### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
+
+##### Security
+
+| Security Schema |
+| --- |
+| Foro_Alura_Auth |
+
+#### DELETE
+##### Summary:
+
+Elimina una respuesta
+
+##### Description:
+
+Solo el autor o un usuario con rol `ADMIN` pueden eliminar una respuesta.
+
+##### Parameters
+
+| Name | Located in | Required | Schema |
+| ---- | ---------- | -------- | ---- |
+| id | path | Yes | long |
+
+##### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
+
+##### Security
+
+| Security Schema |
+| --- |
+| Foro_Alura_Auth |
+
+### /cursos/{id}
+
+#### GET
+##### Summary:
+
+Obtiene un curso por su id
+
+##### Parameters
+
+| Name | Located in | Required | Schema |
+| ---- | ---------- | -------- | ---- |
+| id | path | Yes | long |
+
+##### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
+
+##### Security
+
+| Security Schema |
+| --- |
+| Foro_Alura_Auth |
+
+#### DELETE
+##### Summary:
+
+Eliminar un curso
+
+##### Description:
+
+Solo el instructor del curso o un usuario con rol `ADMIN` pueden eliminar un curso.
+
+##### Parameters
+
+| Name | Located in | Required | Schema |
+| ---- | ---------- | -------- | ---- |
+| id | path | Yes | long |
+
+##### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 200 | OK |
+
+##### Security
+
+| Security Schema |
+| --- |
+| Foro_Alura_Auth |
