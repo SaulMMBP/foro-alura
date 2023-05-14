@@ -55,6 +55,6 @@ public class Respuesta {
 	}
 	
 	public RespuestaResponse toResponse() {
-		return new RespuestaResponse(id, mensaje, fechaCreacion, solucion, autor.toResponse(), topico.getId());
+		return new RespuestaResponse(this);
 	}
 }

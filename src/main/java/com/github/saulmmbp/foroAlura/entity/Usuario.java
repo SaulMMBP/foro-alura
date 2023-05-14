@@ -60,7 +60,7 @@ public class Usuario implements UserDetails {
 	}
 	
 	public UsuarioResponse toResponse() {
-		return new UsuarioResponse(id, nombre, email);
+		return new UsuarioResponse(this);
 	}
 
 	@Override

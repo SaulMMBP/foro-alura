@@ -2,7 +2,6 @@ package com.github.saulmmbp.foroAlura.entity;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -64,8 +63,7 @@ public class Topico {
 	}
 	
 	public TopicoResponse toResponse() {
-		return new TopicoResponse(id, titulo, mensaje, fechaCreacion, estado, autor.toResponse(), curso.toResponse(),
-				respuestas.stream().map(Respuesta::toResponse).collect(Collectors.toSet()));
+		return new TopicoResponse(this);
 	}
 
 }

@@ -43,6 +43,6 @@ public class Curso {
 	}
 
 	public CursoResponse toResponse() {
-		return new CursoResponse(id, nombre, categoria, instructor.toResponse());
+		return new CursoResponse(this);
 	}
 }
