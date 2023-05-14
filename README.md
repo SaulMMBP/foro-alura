@@ -29,6 +29,16 @@ erDiagram
           VARCHAR contrasena
      }
 
+     roles {
+        BIGINT id_rol
+        VARCHAR rol
+     }
+
+     usuarios_roles {
+        BIGINT usuario_id
+        BIGINT rol_id
+     }
+
      cursos {
           BIGINT id_curso
           VARCHAR nombre
@@ -56,6 +66,8 @@ erDiagram
 
      usuarios ||--|{ topicos : make
      usuarios ||--|{ respuestas : make
+     usuarios ||--|{ usuarios_roles : has
+     roles ||--|{ usuarios_roles : has
      topicos }|--|| cursos : of
      topicos ||--|{ respuestas : has
 ```
