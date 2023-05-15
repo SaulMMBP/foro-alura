@@ -16,7 +16,7 @@
 
 Puedes probar la aplicación aquí :)
 
-[Foro Alura REST API Swagger UI](smalagonmtz.duckdns.org/foro-alura/swagger-ui)
+[Foro Alura REST API Swagger UI](http://smalagonmtz.duckdns.org/foro-alura/swagger-ui)
 
 ---
 </div>
