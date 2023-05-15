@@ -12,7 +12,11 @@
   [![](https://img.shields.io/badge/linkedin:-🐔%20Saul%20Malagon%20Martinez-061E3C?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/company/alura-latam/mycompany/)
 
 ---
-¡Bienvenido al proyecto con mi solución al desafío Foro Alura con Java y Spring! 
+¡Bienvenido al proyecto con mi solución al desafío Foro Alura con Java y Spring!
+
+Puedes probar la aplicación aquí :)
+
+[Foro Alura REST API Swagger UI](smalagonmtz.duckdns.org/foro-alura/swagger-ui)
 
 ---
 </div>
@@ -94,7 +98,7 @@ erDiagram
      - SECURITY_SECRET: cualquier string, yo le puse "quesadilla"
 4. Una vez en ejecución, puedes utilizar postman para realizar las peticiones, pero primero debes realizar una petición a "/login" con los datos de algún usuario de la base de datos para recibir un token con el que podrás realizar peticiones a cualquier otro endpoint por hasta 2 horas. Pasando las 2 horas, tendrás que loggearte de nuevo.
 
-**NOTA:** El proyecto está documentado con swagger, por lo que se puede visualizar por medio de la ruta http://localhost:8080/swagger-ui.html en caso de ejecutarse de manera local (en un ambiente de desarrollo)
+**NOTA:** El proyecto está documentado con swagger, por lo que se puede visualizar por medio de la ruta http://localhost:8080/foro-alura/swagger-ui en caso de ejecutarse de manera local (en un ambiente de desarrollo).
 
 # Foro Alura API DOCS
 Practice project - Alura Challenge ONE
