@@ -79,6 +79,7 @@ erDiagram
 [![](https://img.shields.io/badge/-Java-C74634?style=for-the-badge&logo=java)](https://www.java.com/en/)
 [![](https://img.shields.io/badge/-spring%20boot-1B1F23?style=for-the-badge&logo=spring)](https://start.spring.io/)
 [![](https://img.shields.io/badge/-jwt%20token-000000?style=for-the-badge&logo=jwt)](https://jwt.io/)
+[![](https://img.shields.io/badge/-swagger-ffffff?style=for-the-badge&logo=swagger)](https://jwt.io/)
 
 </div>
 
