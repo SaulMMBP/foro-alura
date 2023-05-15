@@ -5,12 +5,11 @@
 </div>
 
 <div align="center">
-     <a href="https://www.linkedin.com/company/oracle/">
-          <img src="https://img.shields.io/badge/linkedin:-🧡 Oracle-C74634?style=for-the-badge&logo=linkedin"/>
-     </a>
-     <a href="https://www.linkedin.com/company/alura-latam/mycompany/">
-          <img src="https://img.shields.io/badge/linkedin:-💙 Alura Latam-061E3C?style=for-the-badge&logo=linkedin"/>
-     </a>
+
+  [![](https://img.shields.io/badge/linkedin:-🧡%20Oracle-C74634?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/company/oracle/)
+  [![](https://img.shields.io/badge/linkedin:-💙%20Alura%20Latam-061E3C?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/company/alura-latam/mycompany/)
+
+  [![](https://img.shields.io/badge/linkedin:-🐔%20Saul%20Malagon%20Martinez-061E3C?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/company/alura-latam/mycompany/)
 
 ---
 ¡Bienvenido al proyecto con mi solución al desafío Foro Alura con Java y Spring! 
@@ -73,13 +72,15 @@ erDiagram
 ```
 
 ## 🖥️ Tecnologías Utilizadas:
+<div align="center">
 
-- [Eclipse](https://www.eclipse.org/)
-- [MySql](https://www.mysql.com/)
-- [Java](https://www.java.com/en/)
+[![](https://img.shields.io/badge/-Eclipse-F7941E?style=for-the-badge&logo=eclipse)](https://www.eclipse.org/)
+[![](https://img.shields.io/badge/-MySQL-ffffff?style=for-the-badge&logo=mysql)](https://www.mysql.com/)
+[![](https://img.shields.io/badge/-Java-C74634?style=for-the-badge&logo=java)](https://www.java.com/en/)
+[![](https://img.shields.io/badge/-spring%20boot-1B1F23?style=for-the-badge&logo=spring)](https://start.spring.io/)
+[![](https://img.shields.io/badge/-jwt%20token-000000?style=for-the-badge&logo=jwt)](https://jwt.io/)
 
-- [Spring Security](https://start.spring.io/)
-- [Token JWT](https://jwt.io/)
+</div>
 
 ## ⚙️ Indicaciones para ejecución desde IDE
 
@@ -91,6 +92,8 @@ erDiagram
      - MYSQL_PASSWORD: tu contraseña de mysql
      - SECURITY_SECRET: cualquier string, yo le puse "quesadilla"
 4. Una vez en ejecución, puedes utilizar postman para realizar las peticiones, pero primero debes realizar una petición a "/login" con los datos de algún usuario de la base de datos para recibir un token con el que podrás realizar peticiones a cualquier otro endpoint por hasta 2 horas. Pasando las 2 horas, tendrás que loggearte de nuevo.
+
+**NOTA:** El proyecto está documentado con swagger, por lo que se puede visualizar por medio de la ruta http://localhost:8080/swagger-ui.html en caso de ejecutarse de manera local (en un ambiente de desarrollo)
 
 # Foro Alura API DOCS
 Practice project - Alura Challenge ONE
@@ -128,8 +131,6 @@ Obtiene un Token JWT
   "jwtToken": "string"
 }
 ```
-
-
 
 ### /usuarios
 
@@ -192,12 +193,6 @@ Obtiene una lista paginada de todos los usuarios
 }
 ```
 
-##### Security
-
-| Security Auth | Format | Header | Sample |
-| --- | --- | --- | --- |
-| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
-
 #### PUT
 ##### Summary:
 
@@ -242,14 +237,18 @@ Solo los usuarios con rol `ADMIN` pueden modificar la información de cualquier 
 
 ##### Security
 
-| Security Schema |
-| --- |
-| Foro_Alura_Auth |
+| Security Auth | Format | Header | Sample |
+| --- | --- | --- | --- |
+| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
 
 #### POST
 ##### Summary:
 
 Crea un nuevo usuario
+
+##### Description 
+
+Se debe usar una contraseña encriptada con bcrypt para registrar un nuevo usuario.
 
 ##### Request body
 
@@ -282,12 +281,6 @@ Crea un nuevo usuario
   }
 }
 ```
-
-##### Security
-
-| Security Auth | Format | Header | Sample |
-| --- | --- | --- | --- |
-| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
 
 ### /usuarios/{id}
 
@@ -323,12 +316,6 @@ Obtiene un usuario por su id
   }
 }
 ```
-
-##### Security
-
-| Security Auth | Format | Header | Sample |
-| --- | --- | --- | --- |
-| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
 
 #### DELETE
 ##### Summary:
@@ -493,12 +480,6 @@ Obtiene una lista paginada de todos los topicos
   }
 }
 ```
-
-##### Security
-
-| Security Auth | Format | Header | Sample |
-| --- | --- | --- | --- |
-| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
 
 #### PUT
 ##### Summary:
@@ -850,12 +831,6 @@ Obtiene un tópico por su id
 }
 ```
 
-##### Security
-
-| Security Auth | Format | Header | Sample |
-| --- | --- | --- | --- |
-| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
-
 #### DELETE
 ##### Summary:
 
@@ -957,12 +932,6 @@ Obtiene un lista paginada de todas las respuestas a tópicos
   }
 }
 ```
-
-##### Security
-
-| Security Auth | Format | Header | Sample |
-| --- | --- | --- | --- |
-| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
 
 #### PUT
 ##### Summary:
@@ -1155,12 +1124,6 @@ Obtiene una respuesta por su id
 }
 ```
 
-##### Security
-
-| Security Auth | Format | Header | Sample |
-| --- | --- | --- | --- |
-| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
-
 #### DELETE
 ##### Summary:
 
@@ -1256,12 +1219,6 @@ Obtiene una lista paginada de todos los cursos
   }
 }
 ```
-
-##### Security
-
-| Security Auth | Format | Header | Sample |
-| --- | --- | --- | --- |
-| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
 
 #### PUT
 ##### Summary:
@@ -1431,12 +1388,6 @@ Obtiene un curso por su id
   }
 }
 ```
-
-##### Security
-
-| Security Auth | Format | Header | Sample |
-| --- | --- | --- | --- |
-| Bearer token | JWT | Authorization | Bearer asdfasd34123fdsasdfqwev123c123ca |
 
 #### DELETE
 ##### Summary:
