@@ -21,7 +21,6 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/respuestas")
-@SecurityRequirement(name = "Foro_Alura_Auth")
 @Tag(name = "Respuestas", description = "Manipula información de respuestas")
 public class RespuestaController {
 
@@ -63,6 +62,7 @@ public class RespuestaController {
 	}
 	
 	@PostMapping
+	@SecurityRequirement(name = "Foro Alura Auth")
 	@Operation(summary = "Crea una respuesta a un tópico específico", description = "El autor de "
 			+ "la respuesta será el usuario loggeado.")
 	public ResponseEntity<RespuestaResponse> newRespuesta(@RequestBody @Valid RespuestaPostRequest respuestaReq) {
@@ -74,6 +74,7 @@ public class RespuestaController {
 	
 	@PutMapping
 	@PreAuthorize("#respuestaReq.autorId == authentication.principal.id or hasRole('ADMIN')")
+	@SecurityRequirement(name = "Foro Alura Auth")
 	@Operation(summary = "Modifica la información de una respuesta", description = "Solo el autor "
 			+ "o un usuario con rol `ADMIN` pueden modificar la información de una respuesta.")
 	public ResponseEntity<RespuestaResponse> updateRespuesta(@RequestBody @Valid RespuestaPutRequest respuestaReq) {
@@ -85,6 +86,7 @@ public class RespuestaController {
 	
 	@DeleteMapping("/{id}")
 	@PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
+	@SecurityRequirement(name = "Foro Alura Auth")
 	@Operation(summary = "Elimina una respuesta", description = "Solo el autor o un usuario "
 			+ "con rol `ADMIN` pueden eliminar una respuesta.")
 	public ResponseEntity<?> deleteRespuesta(@PathVariable Long id) {

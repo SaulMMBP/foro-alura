@@ -21,7 +21,6 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/cursos")
-@SecurityRequirement(name = "Foro_Alura_Auth")
 @Tag(name = "Cursos", description = "Manipula información de los cursos")
 public class CursoController {
 
@@ -64,6 +63,7 @@ public class CursoController {
 	
 	@PostMapping
 	@PreAuthorize("#cursoReq.instructorId == authentication.principal.id or hasRole('ADMIN')")
+	@SecurityRequirement(name = "Foro Alura Auth")
 	@Operation(summary = "Crea un curso", description = "Solo los usuarios con rol `ADMIN` y/o "
 			+ "`INSTRUCTOR` pueden crear cursos.")
 	public ResponseEntity<CursoResponse> newCurso(@RequestBody @Valid CursoPostRequest cursoReq) {
@@ -75,6 +75,7 @@ public class CursoController {
 	
 	@PutMapping
 	@PreAuthorize("#cursoReq.instructorId == authentication.principal.id or hasRole('ADMIN')")
+	@SecurityRequirement(name = "Foro Alura Auth")
 	@Operation(summary = "Modifica la información de un curso", description = "Solo el instructor "
 			+ "del curso o un usuario con rol `ADMIN` pueden modificar la información de un curso.")
 	public ResponseEntity<CursoResponse> updateCurso(@RequestBody @Valid CursoPutRequest cursoReq) {
@@ -86,6 +87,7 @@ public class CursoController {
 	
 	@DeleteMapping("/{id}")
 	@PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
+	@SecurityRequirement(name = "Foro Alura Auth")
 	@Operation(summary = "Eliminar un curso", description = "Solo el instructor del curso o un "
 			+ "usuario con rol `ADMIN` pueden eliminar un curso.")
 	public ResponseEntity<?> deleteCurso(@PathVariable Long id) {

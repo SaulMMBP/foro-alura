@@ -21,7 +21,6 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/topicos")
-@SecurityRequirement(name = "Foro_Alura_Auth")
 @Tag(name = "Topicos", description = "Manipula información de topicos")
 public class TopicoController {
 
@@ -64,6 +63,7 @@ public class TopicoController {
 	
 	@PostMapping
 	@Operation(summary = "Crea un tópico", description = "El autor del tópico será usuario loggeado" )
+	@SecurityRequirement(name = "Foro Alura Auth")
 	public ResponseEntity<TopicoResponse> newTopico(@RequestBody @Valid TopicoPostRequest topico) {
 		TopicoResponse newTopico = topicoService.save(topico);
 		return ResponseEntity
@@ -73,6 +73,7 @@ public class TopicoController {
 	
 	@PutMapping
 	@PreAuthorize("#topico.autorId == authentication.principal.id or hasRole('ADMIN')")
+	@SecurityRequirement(name = "Foro Alura Auth")
 	@Operation(summary = "Modifica la información de un tópico", description = "Solo el autor "
 			+ "del tópico o un usuario con rol `ADMIN` pueden modificar la información del mismo")
 	public ResponseEntity<TopicoResponse> updateTopico(@RequestBody @Valid TopicoPutRequest topico) {
@@ -84,6 +85,7 @@ public class TopicoController {
 	
 	@DeleteMapping("/{id}")
 	@PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
+	@SecurityRequirement(name = "Foro Alura Auth")
 	@Operation(summary = "Elmina un tópico", description = "Solo el autor del tópico o un usuario "
 			+ "con rol `ADMIN` puede eliminar el mismo.")
 	public ResponseEntity<?> deleteTopico(@PathVariable Long id) {

@@ -21,7 +21,6 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/usuarios")
-@SecurityRequirement(name = "Foro_Alura_Auth")
 @Tag(name = "Usuarios", description = "Manipula información de usuarios")
 public class UsuarioController {
 
@@ -63,7 +62,8 @@ public class UsuarioController {
 	}
 	
 	@PostMapping
-	@Operation(summary = "Crea un nuevo usuario")
+	@Operation(summary = "Crea un nuevo usuario", description = "Se debe usar una contraseña encriptada con bcrypt para registrar "
+			+ "un nuevo usuario")
 	public ResponseEntity<UsuarioResponse> newUsuario(@RequestBody @Valid UsuarioPostRequest usuarioReq) {
 		UsuarioResponse usuario = usuarioService.save(usuarioReq);
 		return ResponseEntity
@@ -73,6 +73,7 @@ public class UsuarioController {
 	
 	@PutMapping
 	@PreAuthorize("#usuarioReq.id == authentication.principal.id or hasRole('ADMIN')")
+	@SecurityRequirement(name = "Foro Alura Auth")
 	@Operation(summary = "Modifica la información de un usuario", 
 		description = "Solo los usuarios con rol `ADMIN` pueden modificar la información de cualquier usuario, "
 				+ "los usuarios sin rol `ADMIN` solo pueden modificar su propia información.")
@@ -85,6 +86,7 @@ public class UsuarioController {
 	
 	@DeleteMapping("/{id}")
 	@PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
+	@SecurityRequirement(name = "Foro Alura Auth")
 	@Operation(summary = "Elimina un usuario por su id",
 		description = "Solo los usuarios con rol `ADMIN` puden eliminar cualquier usuario, "
 				+ "los usuarios sin rol `ADMIN` solo pueden eliminar su propia cuenta.")
