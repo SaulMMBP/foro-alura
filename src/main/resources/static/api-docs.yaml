@@ -9,8 +9,8 @@ info:
     email: smalagonmtz@gmail.com
   version: 1.0.0
 servers:
-- url: http://localhost:8080
-  description: Generated server url
+- url: http://smalagonmtz.duckdns.org/foro-alura
+  description: Server url
 tags:
 - name: Respuestas
   description: Manipula información de las respuestas
