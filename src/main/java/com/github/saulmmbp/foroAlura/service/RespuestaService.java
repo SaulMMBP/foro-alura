@@ -1,11 +1,14 @@
 package com.github.saulmmbp.foroAlura.service;
 
-import java.util.List;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import com.github.saulmmbp.foroAlura.controller.RespuestaController;
 import com.github.saulmmbp.foroAlura.dao.*;
 import com.github.saulmmbp.foroAlura.dto.request.*;
 import com.github.saulmmbp.foroAlura.dto.response.RespuestaResponse;
@@ -34,11 +37,9 @@ public class RespuestaService {
 				.collect(Collectors.toList());
 	}
 	
-	public Page<RespuestaResponse> findAllPageable(int page, int pageSize, String sortBy, String orderBy) {
-		Sort sort = orderBy.equalsIgnoreCase(Sort.Direction.ASC.name()) ? 
-				Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-		Pageable pageable = PageRequest.of(page, pageSize, sort);
-		return respuestaRepository.findAll(pageable).map(Respuesta::toResponse);
+	public Page<RespuestaResponse> findAllPageable(Pageable pageable) {
+		return respuestaRepository.findAll(pageable).map(respuesta -> respuesta.toResponse()
+				.add(linkTo(methodOn(RespuestaController.class).getRespuestas(pageable)).withRel("respuestas")));
 	}
 	
 	public RespuestaResponse findById(Long id) {
@@ -63,7 +64,9 @@ public class RespuestaService {
 	}
 	
 	public void delete(Long id) {
-		respuestaRepository.findById(id).orElseThrow();
+		if(!respuestaRepository.existsById(id)) {
+			throw new NoSuchElementException();
+		}
 		respuestaRepository.deleteById(id);
 	}
 }

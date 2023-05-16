@@ -1,0 +1,1000 @@
+openapi: 3.0.1
+info:
+  title: Foro Alura API
+  description: |-
+    Practice project - Alura Challenge ONE
+    para más información visitar el repositorio [Foro Alura](https://github.com/SaulMMBP/foro-alura)
+  contact:
+    name: Saul Malagon Martinez
+    email: smalagonmtz@gmail.com
+  version: 1.0.0
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+tags:
+- name: Respuestas
+  description: Manipula información de las respuestas
+- name: Topicos
+  description: Manipula información de los topicos
+- name: Cursos
+  description: Manipula información de los cursos
+- name: Usuarios
+  description: Manipula información de usuarios
+- name: Autorización
+  description: Obtiene un JWT Token para autorizar el uso de los endpoints
+paths:
+  /usuarios:
+    get:
+      tags:
+      - Usuarios
+      summary: Obtiene una lista paginada de todos los usuarios
+      operationId: getUsuarios
+      parameters:
+      - name: page
+        in: query
+        description: Índice de página basada en 0 (0..N)
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          default: 0
+      - name: size
+        in: query
+        description: El tamaño de la página a devolver.
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+          default: 10
+      - name: sort
+        in: query
+        description: "Criterio de ordenamiento en formato: `property,(asc|desc)`. Default\
+          \ sort order is ascending (asc). Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/PagedUsuarioResponse'
+    put:
+      tags:
+      - Usuarios
+      summary: Modifica la información de un usuario
+      description: "Solo los usuarios con rol `ADMIN` pueden modificar la informació\
+        n de cualquier usuario, los usuarios sin rol `ADMIN` solo pueden modificar\
+        \ su propia información."
+      operationId: updateUsuario
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioPutRequest'
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: Not Found
+        "403":
+          description: Forbidden
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/UsuarioResponse'
+      security:
+      - Foro Alura Auth: []
+    post:
+      tags:
+      - Usuarios
+      summary: Crea un nuevo usuario
+      description: Se debe usar una contraseña encriptada con bcrypt para registrar
+        un nuevo usuario
+      operationId: newUsuario
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioPostRequest'
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: Forbidden
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/UsuarioResponse'
+  /topicos:
+    get:
+      tags:
+      - Topicos
+      summary: Obtiene una lista paginada de todos los topicos
+      operationId: getTopicos
+      parameters:
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          default: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+          default: 10
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/PagedTopicoResponse'
+    put:
+      tags:
+      - Topicos
+      summary: Modifica la información de un tópico
+      description: Solo el autor del tópico o un usuario con rol `ADMIN` pueden modificar
+        la información del mismo
+      operationId: updateTopico
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TopicoPutRequest'
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: Not Found
+        "403":
+          description: Forbidden
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/TopicoResponse'
+      security:
+      - Foro Alura Auth: []
+    post:
+      tags:
+      - Topicos
+      summary: Crea un tópico
+      description: El autor del tópico será usuario loggeado
+      operationId: newTopico
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TopicoPostRequest'
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: Forbidden
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/TopicoResponse'
+      security:
+      - Foro Alura Auth: []
+  /respuestas:
+    get:
+      tags:
+      - Respuestas
+      summary: Obtiene un lista paginada de todas las respuestas a tópicos
+      operationId: getRespuestas
+      parameters:
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          default: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+          default: 10
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/PagedRespuestaResponse'
+    put:
+      tags:
+      - Respuestas
+      summary: Modifica la información de una respuesta
+      description: Solo el autor o un usuario con rol `ADMIN` pueden modificar la
+        información de una respuesta.
+      operationId: updateRespuesta
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RespuestaPutRequest'
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: Not Found
+        "403":
+          description: Forbidden
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/RespuestaResponse'
+      security:
+      - Foro Alura Auth: []
+    post:
+      tags:
+      - Respuestas
+      summary: Crea una respuesta a un tópico específico
+      description: El autor de la respuesta será el usuario loggeado.
+      operationId: newRespuesta
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RespuestaPostRequest'
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: Forbidden
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/RespuestaResponse'
+      security:
+      - Foro Alura Auth: []
+  /cursos:
+    get:
+      tags:
+      - Cursos
+      summary: Obtiene una lista paginada de todos los cursos
+      operationId: getCursos
+      parameters:
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          default: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+          default: 10
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/PagedCursoResponse'
+    put:
+      tags:
+      - Cursos
+      summary: Modifica la información de un curso
+      description: Solo el instructor del curso o un usuario con rol `ADMIN` pueden
+        modificar la información de un curso.
+      operationId: updateCurso
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CursoPutRequest'
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: Not Found
+        "403":
+          description: Forbidden
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/CursoResponse'
+      security:
+      - Foro Alura Auth: []
+    post:
+      tags:
+      - Cursos
+      summary: Crea un curso
+      description: Solo los usuarios con rol `ADMIN` y/o `INSTRUCTOR` pueden crear
+        cursos.
+      operationId: newCurso
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CursoPostRequest'
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: Forbidden
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/CursoResponse'
+      security:
+      - Foro Alura Auth: []
+  /login:
+    post:
+      tags:
+      - Autorización
+      summary: Obtiene un Token JWT
+      operationId: authenticateUsuario
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthenticationRequest'
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: Not Found
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResponse'
+  /usuarios/{id}:
+    get:
+      tags:
+      - Usuarios
+      summary: Obtiene un usuario por su id
+      operationId: getUsuario
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Not Found
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/UsuarioResponse'
+    delete:
+      tags:
+      - Usuarios
+      summary: Elimina un usuario por su id
+      description: "Solo los usuarios con rol `ADMIN` puden eliminar cualquier usuario,\
+        \ los usuarios sin rol `ADMIN` solo pueden eliminar su propia cuenta."
+      operationId: deleteUsuario
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Not Found
+        "403":
+          description: Forbidden
+        "200":
+          description: OK
+      security:
+      - Foro Alura Auth: []
+  /topicos/{id}:
+    get:
+      tags:
+      - Topicos
+      summary: Obtiene un tópico por su id
+      operationId: getTopico
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Not Found
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/TopicoResponse'
+    delete:
+      tags:
+      - Topicos
+      summary: Elmina un tópico
+      description: Solo el autor del tópico o un usuario con rol `ADMIN` puede eliminar
+        el mismo.
+      operationId: deleteTopico
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Not Found
+        "403":
+          description: Forbidden
+        "200":
+          description: OK
+      security:
+      - Foro Alura Auth: []
+  /respuestas/{id}:
+    get:
+      tags:
+      - Respuestas
+      summary: Obtiene una respuesta por su id
+      operationId: getRespuesta
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Not Found
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/RespuestaResponse'
+    delete:
+      tags:
+      - Respuestas
+      summary: Elimina una respuesta
+      description: Solo el autor o un usuario con rol `ADMIN` pueden eliminar una
+        respuesta.
+      operationId: deleteRespuesta
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Not Found
+        "403":
+          description: Forbidden
+        "200":
+          description: OK
+      security:
+      - Foro Alura Auth: []
+  /cursos/{id}:
+    get:
+      tags:
+      - Cursos
+      summary: Obtiene un curso por su id
+      operationId: getCurso
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Not Found
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/CursoResponse'
+    delete:
+      tags:
+      - Cursos
+      summary: Eliminar un curso
+      description: Solo el instructor del curso o un usuario con rol `ADMIN` pueden
+        eliminar un curso.
+      operationId: deleteCurso
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Not Found
+        "403":
+          description: Forbidden
+        "200":
+          description: OK
+      security:
+      - Foro Alura Auth: []
+components:
+  schemas:
+    UsuarioPutRequest:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nombre:
+          type: string
+        email:
+          type: string
+        contrasena:
+          type: string
+    UsuarioResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nombre:
+          type: string
+        email:
+          type: string
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/Link'
+            usuarios:
+              $ref: '#/components/schemas/Link'
+    TopicoPutRequest:
+      required:
+      - autorId
+      - id
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        titulo:
+          type: string
+        mensaje:
+          type: string
+        estado:
+          type: string
+          enum:
+          - NO_RESPONDIDO
+          - NO_SOLUCIONADO
+          - SOLUCIONADO
+          - CERRADO
+        autorId:
+          type: integer
+          format: int64
+    CursoResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nombre:
+          type: string
+        categoria:
+          type: string
+        instructor:
+          $ref: '#/components/schemas/UsuarioResponse'
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/Link'
+            cursos:
+              $ref: '#/components/schemas/Link'
+    RespuestaResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        mensaje:
+          type: string
+        fechaCreacion:
+          type: string
+          format: date-time
+        solucion:
+          type: boolean
+        autor:
+          $ref: '#/components/schemas/UsuarioResponse'
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/Link'
+            topico:
+              $ref: '#/components/schemas/Link'
+            respuestas:
+              $ref: '#/components/schemas/Link'
+    TopicoResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        titulo:
+          type: string
+        mensaje:
+          type: string
+        fechaCreacion:
+          type: string
+          format: date-time
+        estado:
+          type: string
+          enum:
+          - NO_RESPONDIDO
+          - NO_SOLUCIONADO
+          - SOLUCIONADO
+          - CERRADO
+        autor:
+          $ref: '#/components/schemas/UsuarioResponse'
+        curso:
+          $ref: '#/components/schemas/CursoResponse'
+        respuestas:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/RespuestaResponse'
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/Link'
+            topicos:
+              $ref: '#/components/schemas/Link'
+    RespuestaPutRequest:
+      required:
+      - autorId
+      - id
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        mensaje:
+          type: string
+        solucion:
+          type: boolean
+        autorId:
+          type: integer
+          format: int64
+    CursoPutRequest:
+      required:
+      - id
+      - instructorId
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nombre:
+          type: string
+        categoria:
+          type: string
+        instructorId:
+          type: integer
+          format: int64
+    UsuarioPostRequest:
+      required:
+      - contrasena
+      - email
+      - nombre
+      type: object
+      properties:
+        nombre:
+          type: string
+        email:
+          type: string
+        contrasena:
+          type: string
+    TopicoPostRequest:
+      required:
+      - autorId
+      - cursoId
+      - mensaje
+      - titulo
+      type: object
+      properties:
+        titulo:
+          type: string
+        mensaje:
+          type: string
+        autorId:
+          type: integer
+          format: int64
+        cursoId:
+          type: integer
+          format: int64
+    RespuestaPostRequest:
+      required:
+      - autorId
+      - mensaje
+      - topicoId
+      type: object
+      properties:
+        mensaje:
+          type: string
+        autorId:
+          type: integer
+          format: int64
+        topicoId:
+          type: integer
+          format: int64
+    AuthenticationRequest:
+      required:
+      - contrasena
+      - email
+      type: object
+      properties:
+        email:
+          type: string
+        contrasena:
+          type: string
+    AuthenticationResponse:
+      type: object
+      properties:
+        jwtToken:
+          type: string
+    CursoPostRequest:
+      required:
+      - categoria
+      - instructorId
+      - nombre
+      type: object
+      properties:
+        nombre:
+          type: string
+        categoria:
+          type: string
+        instructorId:
+          type: integer
+          format: int64
+    PageMetadata:
+      type: object
+      properties:
+        size:
+          type: integer
+          format: int64
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int64
+        number:
+          type: integer
+          format: int64
+    PagedUsuarioResponse:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            usuarios:
+              type: array
+              items:
+                $ref: '#/components/schemas/UsuarioResponse'
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/Link'
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+    PagedTopicoResponse:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            topicos:
+              type: array
+              items:
+                $ref: '#/components/schemas/TopicoResponse'
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/Link'
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+    PagedRespuestaResponse:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            respuestas:
+              type: array
+              items:
+                $ref: '#/components/schemas/RespuestaResponse'
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/Link'
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+    PagedCursoResponse:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            cursos:
+              type: array
+              items:
+                $ref: '#/components/schemas/CursoResponse'
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/Link'
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+    ErrorResponse:
+      type: object
+      properties:
+        campo: 
+          type: string
+        error:
+          type: string
+  securitySchemes:
+    Foro Alura Auth:
+      type: http
+      description: "Ingresa el JWT Token. Este puede ser obtenido desde /login. Para\
+        \ ejecutar pruebas utilizando la basede datos que se provee en el repositorio\
+        \ [Foro Alura](https://github.com/SaulMMBP/foro-alura), puedes utilizar: \n\
+        - Rol `ADMIN`\n```\n{\n\t'usuario':'saul@mail.com',\n\t'contrasena':'1234'\n\
+        }\n```\n- Rol `INSTRUCTOR`\n```\n{\n\t'usuario':'daniel@mail.com',\n\t'contrasena':'1234'\n\
+        }\n```\n- Rol `USER`\n```\n{\n\t'usuario':'will@mail.com',\n\t'contrasena':'1234'\n\
+        }\n```\n"
+      scheme: bearer
+      bearerFormat: JWT

@@ -10,9 +10,8 @@ import org.springframework.hateoas.*;
 import org.springframework.hateoas.server.core.Relation;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.github.saulmmbp.foroAlura.controller.*;
+import com.github.saulmmbp.foroAlura.controller.TopicoController;
 import com.github.saulmmbp.foroAlura.entity.*;
-import com.github.saulmmbp.foroAlura.util.ForoConstants;
 
 import lombok.*;
 
@@ -42,15 +41,7 @@ public final class TopicoResponse extends RepresentationModel<TopicoResponse> {
 		this.curso = topico.getCurso().toResponse();
 		this.respuestas = topico.getRespuestas().stream().map(Respuesta::toResponse).collect(Collectors.toSet());
 		
-		this.add(linkTo(methodOn(TopicoController.class).getTopico(id)).withSelfRel(),
-				linkTo(methodOn(UsuarioController.class).getUsuario(autor.getId())).withRel("autor"),
-				linkTo(methodOn(CursoController.class).getCurso(curso.getId())).withRel("curso"),
-				linkTo(methodOn(TopicoController.class).getTopicos(
-						Integer.parseInt(ForoConstants.DEFAULT_PAGE_NUMBER), 
-						Integer.parseInt(ForoConstants.DEFAULT_PAGE_SIZE), 
-						ForoConstants.DEFAULT_PAGE_SORT_BY, 
-						ForoConstants.DEFAULT_PAGE_ORDER_BY))
-				.withRel("topicos"));
+		this.add(linkTo(methodOn(TopicoController.class).getTopico(id)).withSelfRel());
 		
 		this.add(links);
 	}

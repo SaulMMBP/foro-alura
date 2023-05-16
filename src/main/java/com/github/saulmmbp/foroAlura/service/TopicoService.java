@@ -1,11 +1,14 @@
 package com.github.saulmmbp.foroAlura.service;
 
-import java.util.List;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import com.github.saulmmbp.foroAlura.controller.TopicoController;
 import com.github.saulmmbp.foroAlura.dao.*;
 import com.github.saulmmbp.foroAlura.dto.request.*;
 import com.github.saulmmbp.foroAlura.dto.response.TopicoResponse;
@@ -35,11 +38,9 @@ public class TopicoService {
 				.collect(Collectors.toList());
 	}
 	
-	public Page<TopicoResponse> findAllPageable(int page, int size, String sortBy, String orderBy) {
-		Sort sort = orderBy.equalsIgnoreCase(Sort.Direction.ASC.name()) ? 
-				Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-		Pageable pageable = PageRequest.of(page, size, sort);
-		return topicoRepository.findAll(pageable).map(Topico::toResponse);
+	public Page<TopicoResponse> findAllPageable(Pageable pageable) {
+		return topicoRepository.findAll(pageable).map(topico -> topico.toResponse()
+				.add(linkTo(methodOn(TopicoController.class).getTopicos(pageable)).withRel("topicos")));
 	}
 	
 	public TopicoResponse findById(Long id) {
@@ -63,7 +64,9 @@ public class TopicoService {
 	}
 	
 	public void delete(Long id) {
-		topicoRepository.findById(id).orElseThrow();
+		if(!topicoRepository.existsById(id)) {
+			throw new NoSuchElementException();
+		}
 		topicoRepository.deleteById(id);
 	}
 }

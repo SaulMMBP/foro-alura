@@ -1,14 +1,17 @@
 package com.github.saulmmbp.foroAlura.service;
 
-import java.util.List;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import com.github.saulmmbp.foroAlura.controller.UsuarioController;
 import com.github.saulmmbp.foroAlura.dao.UsuarioRepository;
 import com.github.saulmmbp.foroAlura.dto.request.*;
-import com.github.saulmmbp.foroAlura.dto.response.*;
+import com.github.saulmmbp.foroAlura.dto.response.UsuarioResponse;
 import com.github.saulmmbp.foroAlura.entity.Usuario;
 
 import jakarta.transaction.Transactional;
@@ -29,11 +32,9 @@ public class UsuarioService {
 				.collect(Collectors.toList());
 	}
 	
-	public Page<UsuarioResponse> findAllPageable(int page, int size, String sortBy, String orderBy) {
-		Sort sort = orderBy.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
-				Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-		Pageable pageable = PageRequest.of(page, size, sort);
-		return usuarioRepository.findAll(pageable).map(Usuario::toResponse);
+	public Page<UsuarioResponse> findAllPageable(Pageable pageable) {
+		return usuarioRepository.findAll(pageable).map(usuario -> usuario.toResponse()
+					.add(linkTo(methodOn(UsuarioController.class).getUsuarios(pageable)).withRel("usuarios")));
 	}
 	
 	public UsuarioResponse findById(Long id) {
@@ -51,7 +52,9 @@ public class UsuarioService {
 	}
 	
 	public void delete(Long id) {
-		usuarioRepository.findById(id).orElseThrow();
+		if(!usuarioRepository.existsById(id)) {
+			throw new NoSuchElementException();
+		}
 		usuarioRepository.deleteById(id);
 	}
 }

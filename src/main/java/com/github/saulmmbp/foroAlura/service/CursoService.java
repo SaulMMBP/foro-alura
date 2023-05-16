@@ -1,11 +1,14 @@
 package com.github.saulmmbp.foroAlura.service;
 
-import java.util.List;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import com.github.saulmmbp.foroAlura.controller.CursoController;
 import com.github.saulmmbp.foroAlura.dao.*;
 import com.github.saulmmbp.foroAlura.dto.request.*;
 import com.github.saulmmbp.foroAlura.dto.response.CursoResponse;
@@ -31,11 +34,9 @@ public class CursoService {
 				.collect(Collectors.toList());
 	}
 	
-	public Page<CursoResponse> findAllPageable(int page, int pageSize, String sortBy, String orderBy) {
-		Sort sort = orderBy.equalsIgnoreCase(Sort.Direction.ASC.name()) ? 
-				Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-		Pageable pageable = PageRequest.of(page, pageSize, sort);
-		return cursoRepository.findAll(pageable).map(Curso::toResponse);
+	public Page<CursoResponse> findAllPageable(Pageable pageable) {
+		return cursoRepository.findAll(pageable).map(curso -> curso.toResponse()
+				.add(linkTo(methodOn(CursoController.class).getCursos(pageable)).withRel("cursos")));
 	}
 	
 	public CursoResponse findById(Long id) {
@@ -57,7 +58,9 @@ public class CursoService {
 	}
 	
 	public void delete(Long id) {
-		cursoRepository.findById(id).orElseThrow();
+		if(!cursoRepository.existsById(id)) {
+			throw new NoSuchElementException();
+		}
 		cursoRepository.deleteById(id);
 	}
 }

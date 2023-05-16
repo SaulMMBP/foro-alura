@@ -10,7 +10,6 @@ import org.springframework.hateoas.server.core.Relation;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.saulmmbp.foroAlura.controller.*;
 import com.github.saulmmbp.foroAlura.entity.Respuesta;
-import com.github.saulmmbp.foroAlura.util.ForoConstants;
 
 import lombok.*;
 
@@ -37,14 +36,7 @@ public final class RespuestaResponse extends RepresentationModel<RespuestaRespon
 		this.topicoId = respuesta.getTopico().getId();
 		
 		this.add(linkTo(methodOn(RespuestaController.class).getRespuesta(id)).withSelfRel(),
-				linkTo(methodOn(UsuarioController.class).getUsuario(autor.getId())).withRel("autor"),
-				linkTo(methodOn(TopicoController.class).getTopico(topicoId)).withRel("topico"),
-				linkTo(methodOn(RespuestaController.class).getRespuestas(
-						Integer.parseInt(ForoConstants.DEFAULT_PAGE_NUMBER), 
-						Integer.parseInt(ForoConstants.DEFAULT_PAGE_SIZE), 
-						ForoConstants.DEFAULT_PAGE_SORT_BY, 
-						ForoConstants.DEFAULT_PAGE_ORDER_BY))
-					.withRel("respuestas"));
+				linkTo(methodOn(TopicoController.class).getTopico(topicoId)).withRel("topico"));
 		
 		this.add(links);
 	}

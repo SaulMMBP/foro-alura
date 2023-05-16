@@ -7,7 +7,6 @@ import org.springframework.hateoas.server.core.Relation;
 
 import com.github.saulmmbp.foroAlura.controller.UsuarioController;
 import com.github.saulmmbp.foroAlura.entity.Usuario;
-import com.github.saulmmbp.foroAlura.util.ForoConstants;
 
 import lombok.*;
 
@@ -25,12 +24,7 @@ public final class UsuarioResponse extends RepresentationModel<UsuarioResponse> 
 		this.nombre = usuario.getNombre();
 		this.email = usuario.getEmail();
 		
-		this.add(linkTo(methodOn(UsuarioController.class).getUsuario(this.id)).withSelfRel(),
-				linkTo(methodOn(UsuarioController.class).getUsuarios(Integer.parseInt(
-						ForoConstants.DEFAULT_PAGE_NUMBER), 
-						Integer.parseInt(ForoConstants.DEFAULT_PAGE_SIZE), 
-						ForoConstants.DEFAULT_PAGE_SORT_BY, 
-						ForoConstants.DEFAULT_PAGE_ORDER_BY)).withRel("usuarios"));
+		this.add(linkTo(methodOn(UsuarioController.class).getUsuario(this.id)).withSelfRel());
 		this.add(links);
 	}
 	
